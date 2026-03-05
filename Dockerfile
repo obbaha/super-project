@@ -31,14 +31,17 @@ RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev
 # Enable Apache Mod Rewrite
 RUN a2enmod rewrite
 
-# Copy built files from stages
+# ... (الجزء العلوي كما هو حتى سطر النسخ)
 COPY --from=frontend /app /var/www/html
 
-# Update Apache Config for Port 8080
-RUN sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+# تحديث إعدادات Apache لتوجه إلى مجلد public وتغير المنفذ
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
+    && sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 
-# Set Permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# التأكد من تفعيل rewrite وصلاحيات المجلدات
+RUN a2enmod rewrite \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html/storage
 
 WORKDIR /var/www/html
 EXPOSE 8080
