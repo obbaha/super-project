@@ -1,0 +1,8 @@
+@import '../../../../node_modules/cropperjs/dist/cropper.css';
+@import '../../../../vendor/awcodes/filament-curator/resources/css/plugin.css';
+
+/* الآن يمكنك وضع أي شيء آخر تحتها */
+@config 'tailwind.config.js';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
