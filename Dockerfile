@@ -38,7 +38,7 @@ COPY --from=frontend /app /var/www/html
 RUN sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 
 # Set Permissions
-RUN chown -W www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 WORKDIR /var/www/html
 EXPOSE 8080
