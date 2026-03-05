@@ -31,17 +31,21 @@ RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev
 # Enable Apache Mod Rewrite
 RUN a2enmod rewrite
 
-# ... (الجزء العلوي كما هو حتى سطر النسخ)
+# ... (بعد سطر النسخ من الـ frontend)
 COPY --from=frontend /app /var/www/html
 
-# تحديث إعدادات Apache لتوجه إلى مجلد public وتغير المنفذ
+# إصلاح المسار والصلاحيات وإنشاء ملف قاعدة البيانات للـ SQLite مؤقتاً
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
-    && sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+    && sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf \
+    && a2enmod rewrite
 
-# التأكد من تفعيل rewrite وصلاحيات المجلدات
-RUN a2enmod rewrite \
+# إنشاء المجلدات وملف القاعدة وضبط الصلاحيات
+RUN mkdir -p /var/www/html/storage/framework/cache/data \
+    && mkdir -p /var/www/html/storage/framework/sessions \
+    && mkdir -p /var/www/html/storage/framework/views \
+    && touch /var/www/html/database/database.sqlite \
     && chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage
+    && chmod -R 775 /var/www/html/storage /var/www/html/database
 
 WORKDIR /var/www/html
 EXPOSE 8080
