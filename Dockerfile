@@ -42,4 +42,4 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # إعدادات الـ PHP للإنتاج
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-EXPOSE 80
+EXPOSE 8080
