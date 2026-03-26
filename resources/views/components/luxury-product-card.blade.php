@@ -28,7 +28,7 @@
     <div class="relative overflow-hidden rounded-3xl flex flex-col h-full">
 
         {{-- قسم الصورة --}}
-        <div class="relative h-72 overflow-hidden m-3 rounded-2xl bg-white/5">
+        <div class="relative h-48 md:h-72 overflow-hidden m-2 md:m-3 rounded-2xl bg-white/5">
             @if($displayImage)
                 <img src="{{ Storage::url($displayImage->path) }}"
                      class="h-full w-full object-cover transition-all duration-700
@@ -60,9 +60,9 @@
         </div>
 
         {{-- تفاصيل المنتج --}}
-        <div class="p-6 pt-2 space-y-3 flex-grow @if(!$isAvailable) opacity-60 @endif">
+        <div class="p-3 md:p-6 pt-2 space-y-2 md:space-y-3 flex-grow @if(!$isAvailable) opacity-60 @endif">
             <div class="space-y-1">
-                <h3 class="font-bold text-xl text-neutral group-hover:text-primary transition-colors line-clamp-1 font-playfair uppercase tracking-tight">
+                <h3 class="font-bold text-base md:text-xl text-neutral group-hover:text-primary transition-colors line-clamp-1 font-playfair uppercase tracking-tight">
                     {{ $product->name }}
                 </h3>
                 <p class="text-neutral/50 text-xs leading-relaxed line-clamp-2 font-light">
@@ -73,7 +73,7 @@
             <div class="flex items-center justify-between mt-4">
                 <div class="flex flex-col">
                     <span class="text-[10px] text-primary uppercase tracking-widest font-medium opacity-70">السعر</span>
-                    <span class="text-2xl font-black text-neutral">
+                    <span class="text-lg md:text-2xl font-black text-neutral">
                         {{ number_format($displayPrice, 0) }} <span class="text-xs font-normal">ل.س</span>
                     </span>
                 </div>

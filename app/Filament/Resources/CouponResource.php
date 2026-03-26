@@ -67,54 +67,53 @@ public static function table(Table $table): Table
 {
     return $table
         ->columns([
-            // عرض اسم الزبون
-            Tables\Columns\TextColumn::make('customer.name')
-                ->label('Customer')
+            // عرض كود الخصم بشكل بارز
+            Tables\Columns\TextColumn::make('code')
+                ->label('Coupon Code')
                 ->searchable()
-                ->sortable(),
-
-            // عرض اسم المحافظة من العلاقة
-            Tables\Columns\TextColumn::make('governorate.name')
-                ->label('Governorate')
-                ->sortable(),
-
-            // تكلفة الشحن
-            Tables\Columns\TextColumn::make('shipping_cost')
-                ->label('Shipping')
-                ->money('SYP')
-                ->sortable(),
-
-            // الخصم
-            Tables\Columns\TextColumn::make('discount_amount')
-                ->label('Discount')
-                ->money('SYP')
-                ->color('danger'),
-
-            // السعر النهائي - الأهم
-            Tables\Columns\TextColumn::make('total_price')
-                ->label('Total Amount')
-                ->money('SYP')
+                ->fontFamily('mono')
                 ->weight('bold')
-                ->color('success')
+                ->copyable(), // يسمح للمدير بنسخ الكود بنقرة واحدة
+
+            // عرض قيمة الخصم كنسبة مئوية
+            Tables\Columns\TextColumn::make('value')
+                ->label('Discount (%)')
+                ->suffix('%')
+                ->sortable()
+                ->color('primary'),
+
+            // حدود الاستخدام
+            Tables\Columns\TextColumn::make('usage_limit')
+                ->label('Limit')
+                ->placeholder('Unlimited')
                 ->sortable(),
 
-            // حالة الطلب مع ألوان تمييزية
-            Tables\Columns\TextColumn::make('status')
-                ->badge()
-                ->color(fn (string $state): string => match ($state) {
-                    'pending' => 'warning',
-                    'completed' => 'success',
-                    'cancelled' => 'danger',
-                    default => 'gray',
-                }),
+            // تاريخ الانتهاء
+            Tables\Columns\TextColumn::make('expiry_date')
+                ->label('Expiry Date')
+                ->date()
+                ->sortable()
+                ->color(fn ($record): string => $record->expiry_date < now() ? 'danger' : 'gray'),
+
+            // حالة التفعيل (تبديل مباشر من الجدول)
+            Tables\Columns\IconColumn::make('is_active')
+                ->label('Status')
+                ->boolean()
+                ->sortable(),
 
             Tables\Columns\TextColumn::make('created_at')
-                ->label('Date')
+                ->label('Created At')
                 ->dateTime()
-                ->sortable(),
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])
+        ->filters([
+            // إضافة فلتر لتصفية الكوبونات النشطة فقط
+            Tables\Filters\TernaryFilter::make('is_active')
+                ->label('Active Status'),
         ])
         ->actions([
             Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
         ]);
 }
 

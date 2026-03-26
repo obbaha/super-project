@@ -34,20 +34,22 @@ RUN a2enmod rewrite
 # ... (بعد سطر النسخ من الـ frontend)
 COPY --from=frontend /app /var/www/html
 
-# إصلاح المسار والصلاحيات وإنشاء ملف قاعدة البيانات للـ SQLite مؤقتاً
+# ... (بعد الـ Copy)
+RUN mkdir -p /var/www/html/storage/framework/sessions \
+    && mkdir -p /var/www/html/storage/framework/views \
+    && mkdir -p /var/www/html/storage/framework/cache/data \
+    && touch /var/www/html/database/database.sqlite \
+    && chmod -R 777 /var/www/html/storage \
+    && chmod -R 777 /var/www/html/database \
+    && chown -R www-data:www-data /var/www/html
+
+# تحديث Apache
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
     && sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf \
     && a2enmod rewrite
 
-# إنشاء المجلدات وملف القاعدة وضبط الصلاحيات
-RUN mkdir -p /var/www/html/storage/framework/cache/data \
-    && mkdir -p /var/www/html/storage/framework/sessions \
-    && mkdir -p /var/www/html/storage/framework/views \
-    && touch /var/www/html/database/database.sqlite \
-    && chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage /var/www/html/database
-
 WORKDIR /var/www/html
 EXPOSE 8080
 
-CMD ["apache2-foreground"]
+# تشغيل الـ Migration ثم السيرفر
+CMD php artisan migrate --force && apache2-foreground

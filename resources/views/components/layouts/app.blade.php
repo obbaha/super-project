@@ -26,20 +26,21 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     document.addEventListener('livewire:init', () => {
-      // Initialize AOS when Livewire is ready
-      AOS.init({
-        duration: 800,
-        once: true,
-        easing: 'ease-out-quad'
-      });
-      
+AOS.init({
+    duration: 1000,         // جعل الحركة أكثر انسيابية
+    once: true,             // ضروري جداً لعدم تكرار الأنيميشن عند التحديث
+    easing: 'ease-out-quad',
+    disableMutationObserver: false, // السماح لـ AOS بمراقبة التغييرات تلقائياً
+    mirror: false           // يمنع العنصر من الاختفاء عند التمرير للأعلى والأسفل
+});
+
       // Refresh AOS after each Livewire update
-      Livewire.hook('element.updated', (el, component) => {
+      Livewire.hook('morph.updated', (el, component) => {
         setTimeout(() => {
           AOS.refresh();
         }, 100);
       });
-      
+
       // Initialize AOS for any elements added via Alpine
       document.addEventListener('alpine:initialized', () => {
         setTimeout(() => {
@@ -47,13 +48,20 @@
         }, 300);
       });
     });
-    
+
     // Handle page navigation
     document.addEventListener('alpine:navigated', () => {
       setTimeout(() => {
         AOS.refresh();
       }, 500);
     });
+
+
+    window.addEventListener('open-link', event => {
+    window.open(event.detail.url, '_blank');
+});
+
+
   </script>
   @stack('scripts')
 <livewire:cart-wizard />

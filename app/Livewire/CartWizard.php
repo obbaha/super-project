@@ -111,23 +111,45 @@ class CartWizard extends Component
     }
 
     // Coupon handling
-    public function applyCoupon(): void
-    {
-        $this->coupon_error = '';
+public function applyCoupon(): void
+{
+    $this->coupon_error = '';
 
-        if (empty($this->coupon_code)) {
-            $this->coupon_error = 'الرجاء إدخال كود الكوبون';
-            return;
-        }
-
-        if (!$this->calculationService->isValidCoupon($this->coupon_code)) {
-            $this->coupon_error = 'كود الكوبون غير صحيح أو منتهي الصلاحية أو تم استخدامه بالكامل';
-            return;
-        }
-
-        $this->calculateFinalTotals();
-        $this->success('تم تطبيق الكوبون بنجاح');
+    // 1. التحقق من إدخال الكود
+    if (empty($this->coupon_code)) {
+        $this->coupon_error = 'الرجاء إدخال كود الكوبون';
+        return;
     }
+
+    // 2. التحقق من إدخال رقم الهاتف أولاً (لأننا سنفحص التاريخ بناءً عليه)
+    if (empty($this->phone)) {
+        $this->coupon_error = 'الرجاء إدخال رقم هاتفك في الخطوة السابقة أولاً للتحقق من صلاحية الكوبون لك';
+        // نصيحة: يفضل جعل إدخال الهاتف قبل إدخال الكوبون برمجياً
+        return;
+    }
+
+    // 3. التحقق من سجل الطلبات السابقة لهذا الهاتف مع هذا الكوبون
+    $alreadyUsed = Order::whereHas('customer', function ($query) {
+        $query->where('phone', $this->phone);
+    })
+    ->where('coupon_code', $this->coupon_code)
+    ->where('status', '!=', 'cancelled') // نتجاهل الطلبات الملغاة لنعطي الزبون فرصة أخرى
+    ->exists();
+
+    if ($alreadyUsed) {
+        $this->coupon_error = 'عذراً، لقد قمت باستخدام هذا الكوبون مسبقاً في طلب آخر.';
+        return;
+    }
+
+    // 4. التحقق العام من صحة الكوبون (الصلاحية التاريخية والعدد الكلي)
+    if (!$this->calculationService->isValidCoupon($this->coupon_code)) {
+        $this->coupon_error = 'كود الكوبون غير صحيح أو منتهي الصلاحية أو تم استخدامه بالكامل';
+        return;
+    }
+
+    $this->calculateFinalTotals();
+    $this->success('تم تطبيق الكوبون بنجاح');
+}
 
     public function removeCoupon(): void
     {
@@ -381,4 +403,42 @@ class CartWizard extends Component
                 : collect([]),
         ]);
     }
+
+
+
+
+
+
+
+public function shareCart()
+{
+    $items = $this->cartSummary['items'] ?? [];
+
+    if (empty($items)) {
+        $this->error('السلة فارغة، لا يوجد ما يمكن مشاركته.');
+        return;
+    }
+
+    $message = "وقعت عيناي على هذه القطع في *SYRIA SHOP0* ✨\n\n";
+
+    foreach ($items as $item) {
+        // تأكد أن الراوت يستقبل الـ variation_id فعلاً
+        $url = url("/products/" . $item['variation_id']);
+        $message .= "• *" . $item['name'] . "*\n";
+        $message .= "🔗 " . $url . "\n\n";
+    }
+
+    $message .= "ما رأيك؟ هل أطلبها؟ 😍";
+
+    $encodedMessage = rawurlencode($message);
+    $whatsappUrl = "https://wa.me/?text=" . $encodedMessage;
+
+    $this->dispatch('open-link', url: $whatsappUrl);
+}
+
+
+
+
+
+
 }

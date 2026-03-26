@@ -2,7 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-    
+
 /* Table pagination: active page highlight */
 .mary-table-pagination span[aria-current="page"] > span {
     @apply bg-primary text-base-100
@@ -17,4 +17,16 @@
 .mary-table-pagination button {
     @apply bg-base-100
 }
+
+@layer components {
+    @keyframes soft-fade {
+        0%, 100% { opacity: 0.8; transform: translateY(0); }
+        50% { opacity: 1; transform: translateY(-3px); } /* حركة بسيطة جداً لا تكاد تلاحظ */
+    }
+
+    .animate-soft-luxury {
+        animation: soft-fade 4s infinite ease-in-out;
+    }
+}
+
 

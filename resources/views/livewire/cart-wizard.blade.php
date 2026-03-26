@@ -6,38 +6,48 @@
             class="relative bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-xl shadow-primary/20 transition-all hover:scale-110 active:scale-95 flex items-center justify-center group">
             <x-icon name="o-shopping-cart" class="w-8 h-8" />
             {{-- عداد المنتجات - استخدام اللون الثانوي للتمييز --}}
-@if($cartSummary['count'] > 0)
-    <span class="absolute -top-1 -right-1 text-white text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full border-2 border-white/50 shadow-sm overflow-hidden"
-          style="background: linear-gradient(135deg, #d4a574 0%, #e5b2ca 100%);">
-        {{ $cartSummary['count'] }}
-    </span>
-@endif
+
+
+
+    {{-- حاوية الرسالة اللطيفة: تظهر بجانب الزر العائم --}}
+    <div class="absolute bottom-full mb-3 left-0 whitespace-nowrap animate-bounce-slow">
+        <div class="bg-white/80 backdrop-blur-md text-primary text-[11px] font-bold px-4 py-2 rounded-2xl shadow-xl border border-primary/10 relative">
+            <span>قطعكِ المختارة بانتظاركِ.. ✨</span>
+            {{-- سهم صغير يشير للأسفل باتجاه الزر --}}
+            <div class="absolute top-full left-6 w-2 h-2 bg-white/80 rotate-45 -mt-1 border-b border-r border-primary/5"></div>
+        </div>
+    </div>
+
+
+
         </button>
     </div>
 
     {{-- نافذة الويزارد المنبثقة --}}
-    <x-modal
-        wire:model="showModal"
-        box-class="overflow-hidden max-h-[90vh] flex flex-col p-6"
-        width="4xl"
-        alignment="center">
+<x-modal
+    wire:model="showModal"
+    {{-- استخدمنا [&_.btn-circle]:right-auto و [&_.btn-circle]:left-5 لعكس موقع الزر --}}
+    box-class="w-full max-w-none h-full max-h-none rounded-none p-0 flex flex-col bg-main-gradient overflow-hidden relative"
+    width="4xl"
+    alignment="center">
 
-        {{-- العنوان بخط Playfair الفاخر --}}
-        <div class="mb-6 text-center">
-            <h3 class="text-3xl font-playfair font-bold text-primary">إتمام عملية الشراء</h3>
-            <div class="h-1 w-20 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mt-2"></div>
-        </div>
+<div class="sticky top-0 z-50 bg-white/40 backdrop-blur-xl border-b border-primary/5 pt-6 pb-4 mb-6 text-center">
+    <h3 class="text-2xl md:text-3xl font-playfair font-bold text-primary">إتمام عملية الشراء</h3>
+    <div class="h-1 w-20 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mt-2 shadow-sm"></div>
+</div>
 
-        {{-- مؤشر الخطوات - تحسين الألوان لتناسب الهوية الجديدة --}}
-        <div class="steps steps-horizontal w-full mb-6 scale-90 md:scale-100 origin-center text-[10px] md:text-sm shrink-0">
-            <div class="step {{ $step >= 1 ? 'step-primary text-primary font-bold' : 'text-neutral/40' }}">السلة</div>
-            <div class="step {{ $step >= 2 ? 'step-primary text-primary font-bold' : 'text-neutral/40' }}">المعلومات</div>
-            <div class="step {{ $step >= 3 ? 'step-primary text-primary font-bold' : 'text-neutral/40' }}">الشحن</div>
-            <div class="step {{ $step >= 4 ? 'step-primary text-primary font-bold' : 'text-neutral/40' }}">الملخص</div>
-        </div>
+{{-- أضفنا py-4 لإعطاء مساحة عمودية تمنع القص، وأزلنا الـ scale واستبدلناه بتصغير الخط --}}
+<div class="px-2 py-4 overflow-x-auto shrink-0">
+    <div class="steps steps-horizontal w-full text-[11px] md:text-sm font-bold opacity-90">
+        <div class="step {{ $step >= 1 ? 'step-primary text-primary' : 'text-neutral/40' }}">السلة</div>
+        <div class="step {{ $step >= 2 ? 'step-primary text-primary' : 'text-neutral/40' }}">المعلومات</div>
+        <div class="step {{ $step >= 3 ? 'step-primary text-primary' : 'text-neutral/40' }}">الشحن</div>
+        <div class="step {{ $step >= 4 ? 'step-primary text-primary' : 'text-neutral/40' }}">الملخص</div>
+    </div>
+</div>
 
-    <div class="flex flex-col h-[65vh] md:h-[500px] overflow-hidden">
-    <div class="flex-grow overflow-y-auto px-2 custom-scrollbar pb-4">
+    <div class="flex-grow overflow-y-auto px-6 py-10 custom-scrollbar">
+    <div class="max-w-4xl mx-auto pb-20">
             {{-- الخطوة 1: السلة --}}
             @if($step == 1)
                 @if(empty($cartSummary['items']))
@@ -48,12 +58,12 @@
                 @else
                     <div class="space-y-3">
                         @foreach($cartSummary['items'] as $item)
-                            <div wire:key="item-{{ $item['variation_id'] }}" class="flex items-center justify-between bg-white p-4 rounded-2xl border border-primary/10 shadow-sm hover:border-primary/30 transition-colors">
+                            <div wire:key="item-{{ $item['variation_id'] }}" class="flex flex-col sm:flex-row items-center justify-between bg-white/60 p-5 rounded-3xl border border-primary/10 shadow-sm hover:border-primary/30 transition-colors">
                                 <div class="flex items-center gap-4">
                                     {{-- صورة المنتج المحسنة --}}
                                     <div class="relative">
                                         @if($item['image'])
-                                            <img src="{{ $item['image'] }}" class="w-20 h-20 object-cover rounded-xl shadow-inner" />
+                                            <img src="{{ $item['image'] }}" class="w-24 h-24 object-cover rounded-2xl shadow-md" />
                                         @else
                                             <div class="w-20 h-20 bg-base-300 rounded-xl flex items-center justify-center">
                                                 <x-icon name="o-photo" class="w-8 h-8 text-neutral/20"/>
@@ -66,7 +76,7 @@
                                     </div>
                                 </div>
 
-                                <div class="flex items-center gap-4 bg-base-100 p-2 rounded-full border border-primary/5">
+                                <div class="flex items-center justify-between w-full sm:w-auto bg-white/80 p-2 rounded-2xl shadow-inner mt-4 sm:mt-0">
                                     <div class="flex items-center gap-2">
                                         <button
                                             wire:click="decrement({{ $item['variation_id'] }})"
@@ -95,10 +105,26 @@
                         @endforeach
                     </div>
                     {{-- شريط المجموع --}}
-                    <div class="mt-6 flex justify-between items-center bg-primary/5 p-4 rounded-xl border border-primary/10">
-                        <span class="text-neutral font-bold">المجموع الفرعي:</span>
-                        <span class="text-2xl font-black text-primary">{{ number_format($cartSummary['total']) }} <small class="text-xs font-normal">ر.س</small></span>
-                    </div>
+
+
+<div class="mt-6 space-y-3">
+    {{-- زر المشاركة الجديد --}}
+    <button
+        wire:click="shareCart"
+        class="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-primary/30 rounded-2xl text-primary font-bold hover:bg-primary/5 transition-all active:scale-95">
+        <x-icon name="o-share" class="w-5 h-5" />
+        <span>هل تناسب هذه القطع ذوقك؟ شاركي السلة!</span>
+    </button>
+
+    {{-- شريط المجموع --}}
+    <div class="flex justify-between items-center bg-primary/5 p-4 rounded-xl border border-primary/10 shadow-sm">
+        <span class="text-neutral font-bold">المجموع:</span>
+        <span class="text-2xl font-black text-primary">{{ number_format($cartSummary['total']) }} <small class="text-xs font-normal">ر.س</small></span>
+    </div>
+</div>
+
+
+
                 @endif
             @endif
 
