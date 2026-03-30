@@ -1,0 +1,27 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main  # سيتم التنفيذ فقط عند عمل Push لفرع main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: 82.198.228.57
+          username: u162093132
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 65002
+          script: |
+            cd ~/domains/syriashop0.com/laravel_code
+            git pull origin main
+            php artisan config:cache
+            php artisan view:clear
+            php artisan route:cache
