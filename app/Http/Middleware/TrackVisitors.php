@@ -19,10 +19,10 @@ class TrackVisitors
 
         // 2. إضافة الـ IP لمجموعة الزوار الفريدين (العام)
         // تقنية HyperLogLog تضمن عدم التكرار تلقائياً
-        Redis::pfadd('unique_visitors_all_time', [$ip]);
+        //Redis::pfadd('unique_visitors_all_time', [$ip]);
 
         // 3. إضافة الـ IP لمجموعة زوار اليوم الفريدين
-        Redis::pfadd("unique_visitors_day:$today", [$ip]);
+        //Redis::pfadd("unique_visitors_day:$today", [$ip]);
 
         return $next($request);
     }
