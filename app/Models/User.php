@@ -2,20 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser; // موجودة مسبقاً
+use Filament\Panel; // موجودة مسبقاً
 
-class User extends Authenticatable
+// اضفنا implements FilamentUser هنا
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -23,24 +20,21 @@ class User extends Authenticatable
         'role'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'role' => 'string',
     ];
+
+    // أضف هذه الدالة في نهاية الكلاس قبل القوس الأخير }
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // هذا السطر يسمح لأي مستخدم مسجل كأدمن بالدخول
+        return true;
+    }
 }
