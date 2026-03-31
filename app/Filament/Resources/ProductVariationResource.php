@@ -19,7 +19,20 @@ class ProductVariationResource extends Resource
 {
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $navigationGroup = 'Stock';
+public static function getNavigationGroup(): ?string
+{
+    return __('Stock');
+}
+
+public static function getModelLabel(): string
+{
+    return __('Product Variation');
+}
+
+public static function getPluralModelLabel(): string
+{
+    return __('Product Variations');
+}
 
     protected static ?string $model = ProductVariation::class;
 
@@ -31,22 +44,28 @@ class ProductVariationResource extends Resource
             ->schema([
                 Forms\Components\Select::make('product_id')
                     ->relationship('product', 'name')
+                    ->label(__('Product'))
                     ->required(),
                 Forms\Components\TextInput::make('full_sku')
+                    ->label(__('Full SKU'))
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('attribute_name')
+                    ->label(__('Attribute Name'))
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('additional_price')
+                    ->label(__('Additional Price'))
                     ->required()
                     ->numeric()
                     ->default(0.00),
                 Forms\Components\TextInput::make('stock_quantity')
+                    ->label(__('Stock Quantity'))
                     ->required()
                     ->numeric()
                     ->default(0),
                 Forms\Components\TextInput::make('reserved_quantity')
+                    ->label(__('Reserved Quantity'))
                     ->required()
                     ->numeric()
                     ->default(0),
@@ -57,10 +76,9 @@ Forms\Components\Toggle::make('is_available')
                 ->columnSpanFull(), // ليأخذ عرضاً كاملاً أو وضعه بجانب حقل آخر
 
 CuratorPicker::make('featured_image_id')
-    ->label('image')
+    ->label(__('Image'))
     ->directory('product-variations')
     ->relationship('featuredImage', 'id') // نعم، أعدها ولكن تأكد من الموديل
-    ->listDisplay() // اختيار اختياري: يعرض الصور بشكل قائمة منظمة عند الاختيار
     ->lazyLoad()
     ->listDisplay(),
 
@@ -75,19 +93,25 @@ CuratorPicker::make('featured_image_id')
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('product.name')
+                    ->label(__('Product'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('full_sku')
+                    ->label(__('Full SKU'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('attribute_name')
+                    ->label(__('Attribute Name'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('additional_price')
-                    ->numeric()
+                    ->label(__('Additional Price'))
+                    ->money('SYP')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('stock_quantity')
+                    ->label(__('Stock Quantity'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('reserved_quantity')
+                    ->label(__('Reserved Quantity'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -101,7 +125,7 @@ CuratorPicker::make('featured_image_id')
 
 
 Tables\Columns\IconColumn::make('is_available')
-                ->label(__('Status')) // الحالة
+                ->label(__('Status'))
                 ->boolean()
                 ->sortable(),
 

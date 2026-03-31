@@ -18,7 +18,20 @@ class ProductResource extends Resource
 {
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationGroup = 'Stock';
+public static function getNavigationGroup(): ?string
+{
+    return __('Stock');
+}
+
+public static function getModelLabel(): string
+{
+    return __('Product');
+}
+
+public static function getPluralModelLabel(): string
+{
+    return __('Products');
+}
 
     protected static ?string $model = Product::class;
 
@@ -29,7 +42,8 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name')
+                    ->relationship('category', 'Name')
+                    ->label(__('Category'))
                     ->required(),
                 Forms\Components\TextInput::make('sku')
                     ->label('SKU')
@@ -37,14 +51,18 @@ class ProductResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->label(__('Name'))
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
+                    ->label(__('Description'))
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('price')
+                    ->label(__('Price'))
                     ->required()
                     ->numeric()
-                    ->prefix('$'),
+                    ->prefix('SYP'),
                 Forms\Components\Toggle::make('is_available')
+                    ->label(__('Is Available'))
                     ->required(),
             ]);
     }
@@ -54,24 +72,29 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
+                    ->label(__('Category'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('sku')
                     ->label('SKU')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label(__('Name'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
-                    ->money()
+                    ->label(__('Price'))
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_available')
+                    ->label(__('Is_Available'))
                     ->boolean()
                     ->default(true),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label(__('updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

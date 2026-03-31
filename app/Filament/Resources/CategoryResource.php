@@ -18,7 +18,22 @@ class CategoryResource extends Resource
 {
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Stock';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Stock');
+    }
+
+
+public static function getModelLabel(): string
+{
+    return __('Category');
+}
+
+public static function getPluralModelLabel(): string
+{
+    return __('Categories');
+}
+
 
     protected static ?string $model = Category::class;
 
@@ -29,6 +44,7 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label(__('Name'))
                     ->required()
                     ->maxLength(255),
             ]);
@@ -41,10 +57,12 @@ class CategoryResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('Created At'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label(__('Updated At'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

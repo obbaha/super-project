@@ -62,12 +62,13 @@
     "Product Variation": "نوع منتج",
     "Product Variations": "أنواع المنتجات",
     "Full SKU": "رمز SKU الكامل",
-    "Attribute Name": "اسم السمة",
+    "Attribute Name": "اسم النوع",
     "Additional Price": "سعر إضافي",
     "Stock Quantity": "كمية المخزون",
     "Reserved Quantity": "الكمية المحجوزة",
     "Reserved": "المحجوز",
     "Image": "الصورة",
 
-    "Branch Name": "اسم الفرع"
+    "Branch Name": "اسم الفرع",
+    "Is Available": "الحالة"
 }
