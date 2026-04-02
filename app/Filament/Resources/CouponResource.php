@@ -21,7 +21,20 @@ class CouponResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Orders';
+public static function getNavigationGroup(): ?string
+{
+    return __('Orders');
+}
+
+public static function getModelLabel(): string
+{
+    return __('Coupon');
+}
+
+public static function getPluralModelLabel(): string
+{
+    return __('Coupons');
+}
 
     protected static ?int $navigationSort = 3;
 
@@ -29,15 +42,16 @@ public static function form(Form $form): Form
 {
     return $form
         ->schema([
-            Forms\Components\Section::make('Coupon Details')
+            Forms\Components\Section::make(__('Coupon Details'))
                 ->schema([
                     Forms\Components\TextInput::make('code')
+                        ->label(__('Code'))
                         ->required()
                         ->unique(ignoreRecord: true)
                         ->placeholder('E.g., SAVE20'),
 
                     Forms\Components\TextInput::make('value')
-                        ->label('Discount Percentage (%)')
+                        ->label(__('Discount Percentage (%)'))
                         ->numeric()
                         ->required()
                         ->minValue(1)
@@ -45,19 +59,18 @@ public static function form(Form $form): Form
                         ->suffix('%'), // توضيح أنها نسبة مئوية
                 ])->columns(2),
 
-            Forms\Components\Section::make('Usage Limits & Expiry')
+            Forms\Components\Section::make(__('Usage Limits & Expiry'))
                 ->schema([
                     Forms\Components\TextInput::make('usage_limit')
-                        ->numeric()
-                        ->label('Total Usage Limit')
-                        ->helperText('Leave empty for unlimited'),
+                        ->label(__('Total Usage Limit'))
+                        ->numeric(),
 
                     Forms\Components\DatePicker::make('expiry_date')
-                        ->label('Expiration Date')
+                        ->label(__('Expiration Date'))
                         ->native(false),
 
                     Forms\Components\Toggle::make('is_active')
-                        ->label('Is Active')
+                        ->label(__('Is Active'))
                         ->default(true),
                 ])->columns(3),
         ]);
@@ -69,7 +82,7 @@ public static function table(Table $table): Table
         ->columns([
             // عرض كود الخصم بشكل بارز
             Tables\Columns\TextColumn::make('code')
-                ->label('Coupon Code')
+                ->label(__('Code'))
                 ->searchable()
                 ->fontFamily('mono')
                 ->weight('bold')
@@ -77,27 +90,27 @@ public static function table(Table $table): Table
 
             // عرض قيمة الخصم كنسبة مئوية
             Tables\Columns\TextColumn::make('value')
-                ->label('Discount (%)')
+                ->label(__('Discount Percentage (%)'))
                 ->suffix('%')
                 ->sortable()
                 ->color('primary'),
 
             // حدود الاستخدام
             Tables\Columns\TextColumn::make('usage_limit')
-                ->label('Limit')
-                ->placeholder('Unlimited')
+                ->label(__('Limit'))
+                ->placeholder(__('Unlimited'))
                 ->sortable(),
 
             // تاريخ الانتهاء
             Tables\Columns\TextColumn::make('expiry_date')
-                ->label('Expiry Date')
+                ->label(__('Expiry Date'))
                 ->date()
                 ->sortable()
                 ->color(fn ($record): string => $record->expiry_date < now() ? 'danger' : 'gray'),
 
             // حالة التفعيل (تبديل مباشر من الجدول)
             Tables\Columns\IconColumn::make('is_active')
-                ->label('Status')
+                ->label(__('Status'))
                 ->boolean()
                 ->sortable(),
 
@@ -109,7 +122,7 @@ public static function table(Table $table): Table
         ->filters([
             // إضافة فلتر لتصفية الكوبونات النشطة فقط
             Tables\Filters\TernaryFilter::make('is_active')
-                ->label('Active Status'),
+                ->label(__('Status')),
         ])
         ->actions([
             Tables\Actions\EditAction::make(),

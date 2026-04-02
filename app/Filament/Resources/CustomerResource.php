@@ -15,7 +15,20 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CustomerResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Orders';
+public static function getNavigationGroup(): ?string
+{
+    return __('Orders');
+}
+
+public static function getModelLabel(): string
+{
+    return __('Customer');
+}
+
+public static function getPluralModelLabel(): string
+{
+    return __('Customers');
+}
 
     protected static ?int $navigationSort = 2;
 
@@ -27,8 +40,11 @@ public static function form(Form $form): Form
 {
     return $form
         ->schema([
-            Forms\Components\TextInput::make('name')->required(),
+            Forms\Components\TextInput::make('name')
+            ->label(__('Name'))
+            ->required(),
             Forms\Components\TextInput::make('phone')
+                ->label(__('Phone'))
                 ->tel()
                 ->required(),
         ]);
@@ -38,11 +54,20 @@ public static function table(Table $table): Table
 {
     return $table
         ->columns([
-            Tables\Columns\TextColumn::make('name')->searchable(),
-            Tables\Columns\TextColumn::make('phone')->searchable(),
+            Tables\Columns\TextColumn::make('name')
+            ->label(__('Name'))
+            ->searchable(),
+            Tables\Columns\TextColumn::make('phone')
+            ->label(__('Phone'))
+            ->searchable(),
             // سنضيف عدد الطلبات لاحقاً عند العمل على جدول Orders
-            Tables\Columns\TextColumn::make('orders_count')->counts('orders')->label('Orders'),
-            Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
+            Tables\Columns\TextColumn::make('orders_count')
+            ->label(__('Orders Count'))
+            ->counts('orders'),
+            Tables\Columns\TextColumn::make('created_at')
+            ->label(__('Created At'))
+            ->dateTime()
+            ->sortable(),
         ]);
 }
 

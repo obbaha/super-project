@@ -15,7 +15,20 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Orders';
+public static function getNavigationGroup(): ?string
+{
+    return __('Orders');
+}
+
+public static function getModelLabel(): string
+{
+    return __('Order');
+}
+
+public static function getPluralModelLabel(): string
+{
+    return __('Orders');
+}
 
     protected static ?int $navigationSort = 1;
 
@@ -36,16 +49,17 @@ public static function form(Form $form): Form
 {
     return $form
         ->schema([
-            Forms\Components\Section::make('Customer & Location')
+            Forms\Components\Section::make(__('Customer & Location'))
                 ->schema([
                     Forms\Components\Select::make('customer_id')
+                        ->label(__('Customer'))
                         ->relationship('customer', 'name')
                         ->searchable()
                         ->preload()
                         ->required(),
 
                     Forms\Components\Select::make('governorate_id')
-                        ->label('Governorate')
+                        ->label(__('Governorate'))
                         ->relationship('governorate', 'name')
                         ->searchable()
                         ->preload()
@@ -55,7 +69,7 @@ public static function form(Form $form): Form
 
                     // حقول التوصيل داخل دمشق (تظهر فقط إذا كانت المحافظة دمشق)
                     Forms\Components\Select::make('district_id')
-                        ->label('District (Delivery)')
+                        ->label(__('District (Delivery)'))
                         ->relationship('district', 'name', fn ($query, $get) =>
                             $query->where('governorate_id', $get('governorate_id'))
                         )
@@ -72,14 +86,14 @@ public static function form(Form $form): Form
                         }),
 
                     Forms\Components\Textarea::make('detailed_address')
-                        ->label('Detailed Address')
+                        ->label(__('Detailed Address'))
                         ->required(fn ($get) => \App\Models\Governorate::find($get('governorate_id'))?->name === 'دمشق')
                         ->visible(fn ($get) => \App\Models\Governorate::find($get('governorate_id'))?->name === 'دمشق')
                         ->columnSpanFull(),
 
                     // حقل الشحن للمحافظات (يظهر فقط إذا كانت المحافظة ليست دمشق)
                     Forms\Components\Select::make('shipping_branch_id')
-                        ->label('Shipping Branch')
+                        ->label(__('Shipping Branch'))
                         ->relationship('shippingBranch', 'branch_name', fn ($query, $get) =>
                             $query->where('governorate_id', $get('governorate_id'))
                         )
@@ -96,15 +110,16 @@ public static function form(Form $form): Form
                         }),
                 ])->columns(2),
 
-            Forms\Components\Section::make('Financial Details')
+            Forms\Components\Section::make(__('Financial Details'))
                 ->schema([
                     Forms\Components\TextInput::make('shipping_cost')
-                        ->numeric()
+                        ->label(__('Shipping Cost'))
                         ->prefix('SYP')
                         ->readOnly() // لجعل الحساب آلياً من جدول المناطق/الأفرع
                         ->required(),
 
                     Forms\Components\Select::make('coupon_id')
+                        ->label(__('Coupon'))
                         ->relationship('coupon', 'code')
                         ->searchable()
                         ->reactive()
@@ -116,21 +131,26 @@ public static function form(Form $form): Form
                         }),
 
                     Forms\Components\TextInput::make('discount_amount')
+                        ->label(__('Discount Amount'))
                         ->numeric()
                         ->default(0.00)
                         ->readOnly(),
 
                     Forms\Components\TextInput::make('total_price')
-                        ->numeric()
-                        ->required()
-                        ->helperText('Total including shipping and discounts'),
+                        ->label(__('Total Price'))
+                        ->prefix('SYP')
+                        ->required(),
 
                     Forms\Components\Select::make('status')
-                        ->options([
-                            'pending' => 'Pending',
-                            'completed' => 'Completed',
-                            'cancelled' => 'Cancelled',
-                        ])
+
+->label(__('Status'))
+->options([
+    'pending' => __('pending'),
+    'shipping' => __('shipping'),
+    'completed' => __('completed'),
+    'cancelled' => __('cancelled'),
+])
+
                         ->visible(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord)
                         ->disabled(fn ($record) => $record && $record->inventory_updated)
                         ->native(false),
@@ -143,35 +163,45 @@ public static function form(Form $form): Form
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('customer.name')
+                    ->label(__('Customer'))
                     ->numeric()
                     ->sortable(),
 
 Tables\Columns\TextColumn::make('governorate.name') // الوصول للاسم عبر العلاقة
-    ->label('Governorate')
+    ->label(__('Governorate'))
     ->searchable()
     ->sortable(),
 
 
 
-                Tables\Columns\TextColumn::make('shippingBranch.id')
-                    ->numeric()
-                    ->sortable(),
+Tables\Columns\TextColumn::make('status')
+    ->label(__('Status'))
+    ->badge() // اختياري: لجعل الحالة تظهر كبطاقة ملونة
+    ->formatStateUsing(fn (string $state): string => __($state))
+    ->color(fn (string $state): string => match ($state) {
+        'pending' => 'warning',
+        'shipping' => 'info',
+        'completed' => 'success',
+        'cancelled' => 'danger',
+        default => 'gray',
+    })
+    ->searchable(),
+
                 Tables\Columns\TextColumn::make('shipping_cost')
-                    ->numeric()
+                    ->label(__('Shipping Cost'))
+                    ->money('SYP')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_price')
-                    ->numeric()
+                    ->label(__('Total Price'))
+                    ->money('SYP')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('coupon.id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('coupon.code')
+                    ->label(__('Coupon'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('discount_amount')
-                    ->numeric()
+                    ->label(__('Discount Amount'))
+                    ->money('SYP')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('inventory_updated')
-                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

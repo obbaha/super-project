@@ -4,7 +4,7 @@
     "Customers": "الزبائن",
     "Customer": "الزبون",
     "Coupons": "الكوبونات",
-    "Coupon": "كوبون",
+    "Coupon": "كوبون الحسم",
     "Districts": "المناطق",
     "District": "منطقة",
     "Governorates": "المحافظات",
@@ -22,9 +22,6 @@
     "Shipping Cost": "تكلفة الشحن",
     "Discount Amount": "قيمة الخصم",
     "Detailed Address": "العنوان بالتفصيل",
-    "Pending": "قيد الانتظار",
-    "Completed": "تم التوصيل",
-    "Cancelled": "ملغي",
     "SYP": "ل.س",
     "Sales": "المبيعات",
     "Management": "الإدارة",
@@ -70,5 +67,12 @@
     "Image": "الصورة",
 
     "Branch Name": "اسم الفرع",
-    "Is Available": "الحالة"
+    "Is Available": "التوفر للعرض",
+
+    "pending": "قيد الانتظار",
+    "completed": "تم التوصيل",
+    "cancelled": "ملغي",
+    "shipping": "قيد الشحن",
+
+    "Unlimited": "غير محدود"
 }
