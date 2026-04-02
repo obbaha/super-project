@@ -16,56 +16,64 @@ class VariationsRelationManager extends RelationManager
 {
     protected static string $relationship = 'variations';
 
+
+
+public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
+{
+    return __('Product Variations');
+}
+
+
+
     public function form(Form $form): Form
 {
     return $form
         ->schema([
-            Forms\Components\Section::make('Variation Details')
+            Forms\Components\Section::make(__('Variation Details'))
                 ->schema([
                     Forms\Components\TextInput::make('full_sku')
-                        ->label('Variation SKU')
+                        ->label(__('Full SKU'))
                         ->required()
                         ->unique(ignoreRecord: true)
                         ->placeholder('e.g., PROD-RED-XL'),
 
                     Forms\Components\TextInput::make('attribute_name')
-                        ->label('Attribute (Color/Size)')
+                        ->label(__('Attribute Name'))
                         ->required()
                         ->placeholder('e.g., Red, XL, 42'),
 
                     Forms\Components\TextInput::make('additional_price')
-                        ->numeric()
-                        ->prefix('+ SYP')
+                        ->label(__('Additional Price'))
+                        ->prefix('SYP')
                         ->default(0.00)
                         ->helperText('Extra cost added to base product price'),
                 ])->columns(3),
 
-            Forms\Components\Section::make('Inventory Management')
+            Forms\Components\Section::make(__('Inventory Management'))
                 ->schema([
                     Forms\Components\TextInput::make('stock_quantity')
-                        ->label('Initial Stock')
+                        ->label(__('Stock Quantity'))
                         ->numeric()
                         ->required()
                         ->default(0)
                         ->minValue(0),
 
                     Forms\Components\TextInput::make('reserved_quantity')
-                        ->label('Reserved (Manual Adjustment)')
+                        ->label(__('Reserved Quantity'))
                         ->numeric()
                         ->default(0)
-                        ->disabledOn('create') // يفضل عدم تعديله يدوياً عند الإنشاء
-                        ->helperText('Current reservations from orders'),
+                        ->disabledOn('create'),
 
                     Forms\Components\Toggle::make('is_available')
-                        ->label('Active Variation')
+                        ->label(__('Is Available'))
                         ->default(true)
                         ->inline(false),
                 ])->columns(3),
 
-            Forms\Components\Section::make('Media')
+            Forms\Components\Section::make(__('Media'))
                 ->schema([
                     CuratorPicker::make('featured_image_id')
-                        ->label('Variation Image')
+                        ->label(__('Image'))
                         ->relationship('featuredImage', 'id') // الربط مع علاقة الوسائط
                         ->constrained(true)
                         ->columnSpanFull(),
@@ -76,13 +84,16 @@ class VariationsRelationManager extends RelationManager
 public function table(Table $table): Table
 {
     return $table
-        ->recordTitleAttribute('sku')
+        ->recordTitleAttribute('full_sku')
         // توجيه الضغط على السطر لصفحة تعديل التنوع (Variation)
         ->recordUrl(fn ($record): string => url("/admin/product-variations/{$record->id}/edit"))
         ->columns([
-            Tables\Columns\TextColumn::make('sku')
+            Tables\Columns\TextColumn::make('full_sku')
+                ->label(__('Full SKU'))
                 ->searchable()
                 ->sortable(),
+            Tables\Columns\TextColumn::make('attribute_name')
+                ->label(__('Attribute Name')),
         ])
         ->filters([
             //

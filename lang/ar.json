@@ -74,5 +74,14 @@
     "cancelled": "ملغي",
     "shipping": "قيد الشحن",
 
-    "Unlimited": "غير محدود"
+    "Unlimited": "غير محدود",
+
+    "Basic Information": "المعلومات الأساسية",
+    "Details": "التفاصيل",
+
+    "Order Items": "محتويات الطلب",
+    "Product & Variation": "المنتج والنوع",
+    "Quantity": "الكمية",
+    "Subtotal": "المجموع الفرعي",
+    "Variation": "النوع"
 }

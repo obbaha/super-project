@@ -14,6 +14,11 @@ class ItemsRelationManager extends RelationManager
 {
     protected static string $relationship = 'items';
 
+public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
+{
+    return __('Order Items');
+}
+
 public function form(Form $form): Form
 {
     $isProcessed = $this->getOwnerRecord()->inventory_updated;
@@ -22,7 +27,7 @@ public function form(Form $form): Form
             // اختيار المنتج والتنوع في قائمة واحدة احترافية
             Forms\Components\Select::make('product_variation_id')
                 ->disabled($isProcessed)
-                ->label('Product & Variation')
+                ->label(__('Product & Variation'))
                 ->relationship('variation', 'id') // نستخدم العلاقة المباشرة
                 ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->product->name} - {$record->attribute_name}")
                 ->searchable()
@@ -36,7 +41,7 @@ public function form(Form $form): Form
                         // السعر الإجمالي للوحدة = سعر المنتج الأساسي + السعر الإضافي للتنوع
                         $unitPrice = $variation->product->price + $variation->additional_price;
                         $set('unit_price', $unitPrice);
-                        
+
                         // تحديث المجموع الفرعي بناءً على الكمية الموجودة
                         $quantity = $get('quantity') ?? 1;
                         $set('subtotal', $unitPrice * $quantity);
@@ -46,7 +51,7 @@ public function form(Form $form): Form
 
             Forms\Components\TextInput::make('quantity')
                 ->disabled($isProcessed)
-                ->label('Quantity')
+                ->label(__('Quantity'))
                 ->numeric()
                 ->default(1)
                 ->minValue(1)
@@ -59,10 +64,10 @@ public function form(Form $form): Form
                 }),
 
             Forms\Components\TextInput::make('subtotal')
-                ->label('Subtotal')
+                ->label(__('Subtotal'))
                 ->numeric()
                 ->readOnly() // لا يمكن للمستخدم تعديله يدوياً لضمان الدقة
-                ->prefix('$') // أو "ر.س" حسب رغبتك
+                ->prefix(__('SYP'))
                 ->required(),
 
             // حقل مخفي لتخزين سعر الوحدة واستخدامه في الحسابات
@@ -76,19 +81,20 @@ public function table(Table $table): Table
     // جلب سجل الطلب الأب [cite: 35]
     $order = $this->getOwnerRecord();
     // التحقق هل الحالة نهائية (تمت المعالجة) [cite: 55, 56]
-    $isProcessed = $order->inventory_updated; 
+    $isProcessed = $order->inventory_updated;
 
     return $table
         ->recordTitleAttribute('product_variation_id')
         ->columns([
             Tables\Columns\TextColumn::make('variation.product.name')
-                ->label('Product'),
+                ->label(__('Product')),
             Tables\Columns\TextColumn::make('variation.attribute_name')
-                ->label('Variation'),
+                ->label(__('Variation')),
             Tables\Columns\TextColumn::make('quantity')
-                ->label('Qty'),
+                ->label(__('Quantity')),
             Tables\Columns\TextColumn::make('subtotal')
-                ->money('SAR'), // أو العملة التي تفضلها
+                ->label(__('Subtotal'))
+                ->money('SYP'),
         ])
         ->headerActions([
             // منع إنشاء عنصر جديد إذا كان الطلب مكتملاً أو ملغياً [cite: 48]

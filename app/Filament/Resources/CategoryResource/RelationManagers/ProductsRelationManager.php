@@ -21,39 +21,49 @@ class ProductsRelationManager extends RelationManager
 {
     protected static string $relationship = 'products';
 
+
+public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
+{
+    return __('Products');
+}
+
+
+
 public function form(Form $form): Form
 {
     return $form
         ->schema([
             // قسم البيانات الأساسية
-            Forms\Components\Section::make('Basic Information')
+            Forms\Components\Section::make(__('Basic Information'))
                 ->schema([
                     TextInput::make('name')
+                        ->label(__('Name'))
                         ->required()
                         ->maxLength(255)
                         ->live(onBlur: true), // لجعل الواجهة تفاعلية
 
                     TextInput::make('sku')
-                        ->label('SKU (Stock Keeping Unit)')
+                        ->label(__('SKU'))
                         ->required()
                         ->unique(ignoreRecord: true)
                         ->maxLength(50),
                 ])->columns(2),
 
             // قسم السعر والوصف
-            Forms\Components\Section::make('Details')
+            Forms\Components\Section::make(__('Details'))
                 ->schema([
                     TextInput::make('price')
-                        ->numeric()
+                        ->label(__('Price'))
                         ->prefix('SYP')
                         ->required()
                         ->default(0),
 
                     Toggle::make('is_available')
-                        ->label('Available for sale')
+                        ->label(__('Is Available'))
                         ->default(true),
 
                     Textarea::make('description')
+                        ->label(__('Description'))
                         ->maxLength(65535)
                         ->columnSpanFull(),
                 ])->columns(2),
@@ -68,7 +78,14 @@ public function table(Table $table): Table
         ->recordUrl(fn (Product $record): string => url("/admin/products/{$record->id}/edit"))
         ->columns([
             Tables\Columns\TextColumn::make('name')
+                ->label(__('Name'))
                 ->searchable()
+                ->sortable(),
+
+
+            Tables\Columns\TextColumn::make('price')
+                ->label(__('Price'))
+                ->money('SYP')
                 ->sortable(),
         ])
         ->filters([
