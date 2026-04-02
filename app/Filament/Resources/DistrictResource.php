@@ -15,9 +15,22 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DistrictResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Shipping Settings';
+public static function getNavigationGroup(): ?string
+{
+    return __('Shipping Settings');
+}
 
-    protected static ?int $navigationSort = 1;
+public static function getModelLabel(): string
+{
+    return __('District');
+}
+
+public static function getPluralModelLabel(): string
+{
+    return __('Districts');
+}
+
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $model = District::class;
 
@@ -28,14 +41,16 @@ public static function form(Form $form): Form
     return $form
         ->schema([
             Forms\Components\Select::make('governorate_id')
+                ->label(__('Governorate'))
                 ->relationship('governorate', 'name')
                 ->required()
                 ->searchable()
                 ->preload(),
             Forms\Components\TextInput::make('name')
+                ->label(__('Name'))
                 ->required(),
             Forms\Components\TextInput::make('shipping_cost')
-                ->numeric()
+                ->label(__('Shipping Cost'))
                 ->prefix('SYP')
                 ->default(0),
         ]);
@@ -45,9 +60,16 @@ public static function form(Form $form): Form
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable(),
-                Tables\Columns\TextColumn::make('governorate.name')->sortable(),
-                Tables\Columns\TextColumn::make('shipping_cost')->money('SYP'),
+                Tables\Columns\TextColumn::make('name')
+                ->label(__('Name'))
+                ->searchable(),
+                Tables\Columns\TextColumn::make('governorate.name')
+                ->label(__('Governorate'))
+                ->sortable(),
+                Tables\Columns\TextColumn::make('shipping_cost')
+                ->label(__('Shipping Cost'))
+                ->money('SYP')
+                ->sortable(),
             ])
             ->filters([
                 //

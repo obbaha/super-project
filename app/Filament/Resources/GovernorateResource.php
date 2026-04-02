@@ -15,9 +15,22 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class GovernorateResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Shipping Settings';
+public static function getNavigationGroup(): ?string
+{
+    return __('Shipping Settings');
+}
 
-    protected static ?int $navigationSort = 3;
+public static function getModelLabel(): string
+{
+    return __('Governorate');
+}
+
+public static function getPluralModelLabel(): string
+{
+    return __('Governorates');
+}
+
+    protected static ?int $navigationSort = 12;
 
     protected static ?string $model = Governorate::class;
 
@@ -28,6 +41,7 @@ public static function form(Form $form): Form
     return $form
         ->schema([
             Forms\Components\TextInput::make('name')
+                ->label(__('Name'))
                 ->required()
                 ->unique(ignoreRecord: true),
         ]);
@@ -37,7 +51,9 @@ public static function table(Table $table): Table
 {
     return $table
         ->columns([
-            Tables\Columns\TextColumn::make('name')->searchable(),
+            Tables\Columns\TextColumn::make('name')
+            ->label(__('Name'))
+            ->searchable(),
         ]);
 }
 
