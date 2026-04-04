@@ -17,11 +17,7 @@ return [
         'check_cross_origin' => true,
     ],
     'curation_formats' => [
-        'jpg',
-        'jpeg',
         'webp',
-        'png',
-        'avif',
     ],
     'curation_presets' => [
         \Awcodes\Curator\Curations\ThumbnailPreset::class,
@@ -32,15 +28,23 @@ return [
         'server' => \Awcodes\Curator\Glide\DefaultServerFactory::class,
         'fallbacks' => [],
         'route_path' => 'curator',
+
+
+'params' => [
+            'q' => '80',      // الجودة 80% لتقليل الحجم مع الحفاظ على النقاء
+            'fm' => 'webp',   // تحويل كافة المخرجات لـ WebP تلقائياً
+        ],
+
+
     ],
     'image_crop_aspect_ratio' => null,
     'image_resize_mode' => null,
-    'image_resize_target_height' => null,
-    'image_resize_target_width' => null,
+    'image_resize_target_height' => 1080,
+    'image_resize_target_width' => 1080,
     'is_limited_to_directory' => false,
-    'is_tenant_aware' => true,
+    'is_tenant_aware' => false,
     'tenant_ownership_relationship_name' => 'tenant',
-    'max_size' => 5000,
+    'max_size' => 102400,
     'model' => \Awcodes\Curator\Models\Media::class,
     'min_size' => 0,
     'path_generator' => null,
@@ -67,4 +71,10 @@ return [
     'table' => [
         'layout' => 'grid',
     ],
+
+
+
+
+
+
 ];
