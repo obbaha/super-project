@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Awcodes\Curator\Models\Media;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 class ProductVariation extends Model
 {
@@ -52,7 +54,7 @@ public function orderItems(): HasMany
 
 public function featuredImage(): BelongsTo
 {
-    // تأكد أن المعامل الثاني هو 'featured_image_id' 
+    // تأكد أن المعامل الثاني هو 'featured_image_id'
     return $this->belongsTo(\Awcodes\Curator\Models\Media::class, 'featured_image_id');
 }
 
@@ -61,8 +63,19 @@ protected static function booted()
 {
     static::saving(function ($model) {
         // سيقوم هذا السطر بإيقاف الحفظ وعرض البيانات التي يحاول لارافيل إرسالها لقاعدة البيانات
-        // dd($model->featured_image_id); 
+        // dd($model->featured_image_id);
     });
 }
+
+
+
+// داخل الكلاس
+public function images(): BelongsToMany
+{
+    return $this->belongsToMany(Media::class, 'media_product_variation', 'product_variation_id', 'media_id')
+        ->withPivot('order')
+        ->orderBy('order');
+}
+
 
 }

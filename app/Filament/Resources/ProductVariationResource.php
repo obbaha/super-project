@@ -75,12 +75,15 @@ Forms\Components\Toggle::make('is_available')
                 ->default(true)
                 ->columnSpanFull(), // ليأخذ عرضاً كاملاً أو وضعه بجانب حقل آخر
 
-CuratorPicker::make('featured_image_id')
-    ->label(__('Image'))
+CuratorPicker::make('images') // استخدم اسم العلاقة التي عرفناها في الموديل
+    ->label(__('Product Gallery'))
+    ->relationship('images', 'id') // الربط بالعلاقة
+    ->multiple() // تفعيل التعدد
+    ->orderColumn('order') // تفعيل حفظ الترتيب في العمود الذي أنشأناه في الـ Migration
     ->directory('product-variations')
-    ->relationship('featuredImage', 'id') // نعم، أعدها ولكن تأكد من الموديل
     ->lazyLoad()
-    ->listDisplay(),
+    ->listDisplay()
+    ->columnSpanFull(),
 
 
 
