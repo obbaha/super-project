@@ -80,30 +80,6 @@ $resetFilters = function() {
             </div>
         </div>
 
-        {{-- 2. Hero Section: نهج التدرج القوي للـ Actions --}}
-        <div class="max-w-6xl mx-auto text-center mb-20 relative pt-32 md:pt-48" data-aos="fade-up">
-            <h1 class="text-5xl md:text-7xl font-extrabold text-neutral mb-8 leading-tight">
-                إكسسوارات تروي قصتك <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-l from-primary via-primary/80 to-primary/50">بأناقة خالدة</span>
-            </h1>
-
-            <p class="text-neutral/60 text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-light">
-                تنسيقات مختارة بعناية من أرقى القطع العالمية، مصممة لتكون رفيقة لحظاتك الأكثر تميزاً.
-            </p>
-
-            <div class="flex flex-col md:flex-row items-center justify-center gap-6">
-                <a href="#products"
-                   class="group relative inline-flex items-center justify-center px-12 py-5 rounded-full bg-primary text-white font-bold text-lg overflow-hidden transition-all duration-500 shadow-[0_20px_40px_rgba(212,165,116,0.2)] hover:shadow-[0_25px_50px_rgba(212,165,116,0.4)]">
-                   <div class="absolute inset-0 w-full h-full bg-white/10 -translate-x-full group-hover:translate-x-full transition-transform duration-700 skew-x-12"></div>
-                   <span class="relative flex items-center">
-                       استعرضي المجموعة
-                       <x-icon name="o-shopping-bag" class="w-5 h-5 mr-3 group-hover:-translate-x-1 transition-transform" />
-                   </span>
-                </a>
-            </div>
-
-
-
         <div class="p-4 md:p-8">
             {{-- 3. شريط البحث: نهج الزجاج (Glassmorphism) --}}
             <div class="max-w-md mx-auto mb-12" data-aos="fade-up">
@@ -117,6 +93,10 @@ $resetFilters = function() {
                     />
                 </div>
             </div>
+
+<livewire:slider-section />
+
+
 
             {{-- 4. الفلاتر: نهج الخليط بين الزجاج واللون الموحد --}}
             <div class="max-w-6xl mx-auto mb-16" data-aos="fade-up">

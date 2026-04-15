@@ -1,0 +1,51 @@
+<?php
+use App\Models\Slider;
+use function Livewire\Volt\{state};
+
+state(['slides' => fn() => Slider::where('is_active', true)->orderBy('order')->get()]);
+?>
+
+<div x-data="{
+        active: 0,
+        loop() {
+            setInterval(() => { this.active = (this.active + 1) % {{ $slides->count() }} }, 5000)
+        }
+     }"
+     x-init="loop()"
+     class="relative w-full max-w-6xl mx-auto overflow-hidden rounded-[2.5rem] shadow-2xl h-[300px] md:h-[500px] group">
+
+    @foreach($slides as $index => $slide)
+        <div x-show="active == {{ $index }}"
+             x-transition:enter="transition ease-out duration-1000"
+             x-transition:enter-start="opacity-0 transform scale-105"
+             x-transition:enter-end="opacity-100 transform scale-100"
+             class="absolute inset-0">
+
+            {{-- الصورة --}}
+            <img src="{{ Storage::url($slide->image->path) }}" class="object-cover w-full h-full">
+
+            {{-- الطبقة المظلمة والمحتوى --}}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8 md:p-16">
+                <div class="text-white">
+                    @if($slide->title)
+                        <h2 class="text-3xl md:text-5xl font-black mb-4">{{ $slide->title }}</h2>
+                    @endif
+                    @if($slide->link)
+                        <a href="{{ $slide->link }}" class="inline-block bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-primary transition-colors">
+                            اكتشف الآن
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    {{-- نقاط التنقل (Indicators) --}}
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+        @foreach($slides as $index => $slide)
+            <button @click="active = {{ $index }}"
+                    class="w-3 h-3 rounded-full transition-all"
+                    :class="active == {{ $index }} ? 'bg-primary w-8' : 'bg-white/50'"></button>
+        @endforeach
+    </div>
+</div>
