@@ -203,9 +203,10 @@ Tables\Columns\TextColumn::make('status')
                     ->money('SYP')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('Order Date'))
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
@@ -217,6 +218,7 @@ Tables\Columns\TextColumn::make('status')
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

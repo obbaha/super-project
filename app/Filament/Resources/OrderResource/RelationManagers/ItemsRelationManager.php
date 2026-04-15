@@ -86,6 +86,12 @@ public function table(Table $table): Table
     return $table
         ->recordTitleAttribute('product_variation_id')
         ->columns([
+            Tables\Columns\ImageColumn::make('variation.images.path')
+    ->label(__('Image'))
+    ->circular() // لجعل الصورة دائرية (اختياري)
+    ->stacked()  // لعرض الصور فوق بعضها إذا كان هناك أكثر من صورة
+    ->limit(1)   // عرض صورة واحدة فقط لتوفير المساحة
+    ->grow(false), // لعدم تمدد العمود أكثر من اللازم
             Tables\Columns\TextColumn::make('variation.product.name')
                 ->label(__('Product')),
             Tables\Columns\TextColumn::make('variation.attribute_name')

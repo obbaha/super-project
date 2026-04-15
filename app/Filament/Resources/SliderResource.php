@@ -23,8 +23,27 @@ class SliderResource extends Resource
 {
     protected static ?string $model = Slider::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+protected static ?string $navigationIcon = 'heroicon-o-photo'; // تغيير الأيقونة لتناسب السلايدر
 
+protected static ?string $navigationGroup = 'Content';
+
+protected static ?int $navigationSort = 1;
+
+
+public static function getNavigationLabel(): string
+{
+    return __('Sliders');
+}
+
+public static function getModelLabel(): string
+{
+    return __('Slider');
+}
+
+public static function getPluralModelLabel(): string
+{
+    return __('Sliders');
+}
 
 public static function form(Form $form): Form
 {
@@ -46,7 +65,7 @@ public static function form(Form $form): Form
             ->label(__('Sort Order')), // الترتيب / Order
 
         Forms\Components\Toggle::make('is_active')
-            ->label(__('Active')) // تفعيل / Active
+            ->label(__('Active'))
             ->default(true),
     ]);
 }
@@ -55,10 +74,10 @@ public static function table(Table $table): Table
     {
         return $table
             ->columns([
+
                 CuratorColumn::make('media_id')
                     ->label(__('Image'))
-                    ->size(80)
-                    ->rounded(),
+                    ->size(60),
 
                 TextColumn::make('title')
                     ->label(__('Title'))
