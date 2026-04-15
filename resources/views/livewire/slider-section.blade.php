@@ -12,7 +12,7 @@ state(['slides' => fn() => Slider::where('is_active', true)->orderBy('order')->g
         }
      }"
      x-init="loop()"
-     class="relative w-full max-w-6xl mx-auto overflow-hidden rounded-[2.5rem] shadow-2xl h-[300px] md:h-[500px] group">
+     class="relative w-full max-w-6xl mx-auto overflow-hidden rounded-[2.5rem] shadow-2xl h-[300px] md:h-[500px] group mb-12 md:mb-20">
 
     @foreach($slides as $index => $slide)
         <div x-show="active == {{ $index }}"
