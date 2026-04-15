@@ -95,7 +95,7 @@ selectVariation(id) {
 
     incrementQty() { this.quantity++ },
     decrementQty() { if(this.quantity > 1) this.quantity-- }
-}" class="min-h-screen py-12 px-4 md:px-8 bg-main-gradient text-neutral" dir="rtl">
+}" class="min-h-screen py-12 px-4 md:px-8 bg-main-gradient text-neutral overflow-x-hidden" dir="rtl">
 
         <div class="max-w-6xl mx-auto">
             {{-- زر العودة --}}
@@ -110,7 +110,7 @@ selectVariation(id) {
 <div class="space-y-6" data-aos="fade-right">
     {{-- الإطار الرئيسي للصورة --}}
     <div class="relative group">
-        <div class="absolute inset-0 bg-white/20 backdrop-blur-md rounded-[2.5rem] border border-white/30 shadow-2xl -rotate-2 group-hover:rotate-0 transition-transform duration-500"></div>
+        <div class="absolute inset-0 bg-white/20 backdrop-blur-md rounded-[2.5rem] border border-white/30 shadow-2xl -rotate-2 group-hover:rotate-0 transition-transform duration-500 pointer-events-none"></div>
         <div class="relative rounded-[2.5rem] overflow-hidden border border-white/50 shadow-xl aspect-square bg-white/10">
             <img :src="currentImage"
                  class="w-full h-full object-cover transition-all duration-700 transform hover:scale-105"
@@ -126,7 +126,7 @@ selectVariation(id) {
     </div>
 
 {{-- الألبوم المصغر: يعرض الآن صور الموديل المختار فقط --}}
-<div class="flex gap-4 overflow-x-auto pb-4 pt-2 custom-scrollbar px-2">
+<div class="flex gap-4 overflow-x-auto pb-4 pt-2 custom-scrollbar px-2 max-w-full">
 
 <template x-for="(imgData, index) in allImages" :key="index">
     <button
