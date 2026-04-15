@@ -16,9 +16,21 @@ state(['slides' => fn() => Slider::where('is_active', true)->orderBy('order')->g
 
     @foreach($slides as $index => $slide)
         <div x-show="active == {{ $index }}"
-             x-transition:enter="transition ease-out duration-1000"
-             x-transition:enter-start="opacity-0 transform scale-105"
-             x-transition:enter-end="opacity-100 transform scale-100"
+
+{{-- زيادة المدة إلى 1100 لزيادة الثقل والهدوء --}}
+     x-transition:enter="transition transform duration-[1100ms]"
+     x-transition:enter-start="-translate-x-full"
+     x-transition:enter-end="translate-x-0"
+
+     x-transition:leave="transition transform duration-[1100ms]"
+     x-transition:leave-start="translate-x-0"
+     x-transition:leave-end="translate-x-full"
+
+     {{-- منحنى أكثر توازناً وهدوءاً في الانطلاق --}}
+     style="transition-timing-function: cubic-bezier(0.45, 0, 0.55, 1);"
+
+
+
              class="absolute inset-0">
 
             {{-- الصورة --}}
