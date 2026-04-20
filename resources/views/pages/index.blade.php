@@ -64,8 +64,8 @@ $resetFilters = function() {
         <div class="absolute bottom-[20%] right-[-5%] w-[35%] h-[35%] bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
 
         {{-- اسم المتجر (غير متحرك) --}}
-        <div class="relative w-full h-0">
-            <div class="absolute top-8 right-8 z-10 hidden md:block" data-aos="fade-left">
+        <div class="relative w-full h-auto md:h-0 pt-8 pb-4 md:py-0">
+            <div class="static md:absolute md:top-8 md:right-8 z-10 flex justify-center md:justify-end" data-aos="fade-left">
                 <div class="flex items-center gap-4">
                     <div class="flex flex-col items-end">
                         <span class="text-primary text-3xl font-black tracking-tighter leading-none select-none">
