@@ -97,36 +97,35 @@ $resetFilters = function() {
 <livewire:slider-section />
 
 
+{{-- حاوية الشريط الموحد --}}
+<div class="max-w-fit mx-auto mb-16 px-2 py-2 bg-white/20 backdrop-blur-xl rounded-full border border-white/30 shadow-xl flex items-center gap-1 overflow-x-auto no-scrollbar" data-aos="fade-up">
 
-            {{-- 4. الفلاتر: نهج الخليط بين الزجاج واللون الموحد --}}
-            <div class="max-w-6xl mx-auto mb-16" data-aos="fade-up">
-                <div class="flex flex-wrap justify-center gap-4">
-                    <button wire:click="resetFilters"
-                        class="px-10 py-3 rounded-full text-xs font-bold tracking-widest uppercase transition-all duration-500 border
-                        @if(!$selectedCategoryId)
-                            bg-primary text-white border-primary shadow-lg shadow-primary/20
-                        @else
-                            bg-white/30 backdrop-blur-sm text-neutral/60 border-primary/10 hover:border-primary/40 hover:bg-white/50
-                        @endif">
-                        الكل
-                    </button>
+    {{-- زر "الكل" كجزء من الشريط --}}
+    <button wire:click="resetFilters"
+        class="whitespace-nowrap px-8 py-3 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-500
+        @if(!$selectedCategoryId)
+            bg-primary text-white shadow-md shadow-primary/30
+        @else
+            text-neutral/40 hover:text-primary hover:bg-white/20
+        @endif">
+        الكل
+    </button>
 
-                    @foreach($categories as $cat)
-                        <button wire:click="$set('selectedCategoryId', {{ $cat->id }})"
-                            class="px-10 py-3 rounded-full text-xs font-bold tracking-widest uppercase transition-all duration-500 border
-                            @if($selectedCategoryId == $cat->id)
-                                bg-primary text-white border-primary shadow-lg shadow-primary/20
-                            @else
-                                bg-white/30 backdrop-blur-sm text-neutral/60 border-primary/10 hover:border-primary/40 hover:bg-white/50
-                            @endif">
-                            {{ $cat->name }}
-                        </button>
-                    @endforeach
-                </div>
-            </div>
+    @foreach($categories as $cat)
+        <button wire:click="$set('selectedCategoryId', {{ $cat->id }})"
+            class="whitespace-nowrap px-8 py-3 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-500
+            @if($selectedCategoryId == $cat->id)
+                bg-primary text-white shadow-md shadow-primary/30
+            @else
+                text-neutral/40 hover:text-primary hover:bg-white/20
+            @endif">
+            {{ $cat->name }}
+        </button>
+    @endforeach
+</div>
 
             {{-- 5. شبكة المنتجات --}}
-            <div class="max-w-7xl mx-auto" id="products" wire:loading.class="opacity-50 pointer-events-none">
+            <div class="max-w-[95%] mx-auto px-4" id="products" wire:loading.class="opacity-50 pointer-events-none">
                 @if($this->products->isNotEmpty())
 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-10">
                             @foreach($this->products as $product)

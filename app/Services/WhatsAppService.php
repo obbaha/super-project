@@ -10,7 +10,7 @@ class WhatsAppService
 
     public function __construct()
     {
-        $rawNumber = config('services.whatsapp.phone_number', '963955438026');
+        $rawNumber = config('services.whatsapp.phone_number', '963930761582');
         $this->phoneNumber = preg_replace('/[^0-9]/', '', $rawNumber);
     }
 
@@ -28,9 +28,9 @@ class WhatsAppService
         $lines = [];
         $lines[] = "📦 *طلب جديد رقم: #{$order->id}*";
         $lines[] = "━━━━━━━━━━━━━━";
-        $lines[] = "👤 *الزبون:* " . ($order->customer->name ?? 'غير محدد'); 
+        $lines[] = "👤 *الزبون:* " . ($order->customer->name ?? 'غير محدد');
         $lines[] = "📞 *الهاتف:* " . ($order->customer->phone ?? 'غير محدد');
-        
+
         // --- قسم العنوان الذكي ---
 // --- قسم العنوان الذكي ---
 $governorateName = $order->governorate->name ?? 'غير محدد';

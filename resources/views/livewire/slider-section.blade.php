@@ -12,7 +12,12 @@ state(['slides' => fn() => Slider::where('is_active', true)->orderBy('order')->g
         }
      }"
      x-init="loop()"
-     class="relative w-full max-w-6xl mx-auto overflow-hidden rounded-[2.5rem] shadow-2xl h-[300px] md:h-[500px] group mb-12 md:mb-20">
+    class="relative w-full max-w-[95%] mx-auto overflow-hidden rounded-[2.5rem] shadow-2xl h-[350px] md:h-[600px] group mb-12 md:mb-20"
+{{-- إضافة AOS: ظهور للأعلى، ببطء، ومع تأخير بسيط --}}
+data-aos="fade-up"
+data-aos-duration="1500"
+data-aos-delay="200"
+data-aos-easing="ease-out-back">
 
     @foreach($slides as $index => $slide)
         <div x-show="active == {{ $index }}"
@@ -37,7 +42,7 @@ state(['slides' => fn() => Slider::where('is_active', true)->orderBy('order')->g
             <img src="{{ Storage::url($slide->image->path) }}" class="object-cover w-full h-full">
 
             {{-- الطبقة المظلمة والمحتوى --}}
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8 md:p-16">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end justify-start p-8 md:p-20 text-right">
                 <div class="text-white">
                     @if($slide->title)
                         <h2 class="text-3xl md:text-5xl font-black mb-4">{{ $slide->title }}</h2>

@@ -94,7 +94,8 @@ selectVariation(id) {
 },
 
     incrementQty() { this.quantity++ },
-    decrementQty() { if(this.quantity > 1) this.quantity-- }
+    decrementQty() { if(this.quantity > 1) this.quantity-- },
+    fullscreenImage: false
 }" class="min-h-screen py-12 px-4 md:px-8 bg-main-gradient text-neutral overflow-x-hidden" dir="rtl">
 
         <div class="max-w-6xl mx-auto">
@@ -113,6 +114,7 @@ selectVariation(id) {
         <div class="absolute inset-0 bg-white/20 backdrop-blur-md rounded-[2.5rem] border border-white/30 shadow-2xl -rotate-2 group-hover:rotate-0 transition-transform duration-500 pointer-events-none"></div>
         <div class="relative rounded-[2.5rem] overflow-hidden border border-white/50 shadow-xl aspect-square bg-white/10">
             <img :src="currentImage"
+                @click="fullscreenImage = true"
                  class="w-full h-full object-cover transition-all duration-700 transform hover:scale-105"
                  alt="{{ $this->product->name }}">
 
@@ -232,6 +234,42 @@ selectVariation(id) {
             .custom-scrollbar::-webkit-scrollbar { height: 4px; }
             .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(212, 165, 116, 0.3); border-radius: 10px; }
         </style>
+
+
+
+
+{{-- مودال تكبير الصورة --}}
+        <template x-teleport="body">
+            <div x-show="fullscreenImage"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 z-[200] flex items-center justify-center bg-white/10 backdrop-blur-2xl p-4 md:p-12"
+                 @keydown.escape.window="fullscreenImage = false">
+
+                {{-- زر الإغلاق --}}
+                <button @click="fullscreenImage = false"
+                        class="absolute top-8 left-8 text-white/50 hover:text-white transition-colors z-[210]">
+                    <x-icon name="o-x-mark" class="w-12 h-12" />
+                </button>
+
+                {{-- الصورة المكبرة --}}
+                <img :src="currentImage"
+                     @click.away="fullscreenImage = false"
+                     class="max-w-full max-h-full object-contain rounded-3xl shadow-2xl shadow-primary/10"
+                     alt="Full view">
+            </div>
+        </template>
+
+
+
+
+
+
+
     </div>
     @endvolt
 </x-layouts.app>
