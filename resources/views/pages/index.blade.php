@@ -57,7 +57,7 @@ $resetFilters = function() {
 <x-layouts.app>
     @volt
     {{-- 1. عنصر الجذر: يحمل التدرج الأساسي والخلفية --}}
-    <div class="min-h-screen bg-main-gradient text-neutral relative overflow-hidden" dir="rtl">
+    <div class="min-h-screen bg-main-gradient text-neutral relative overflow-x-clip" dir="rtl">
 
         {{-- العناصر الضبابية العائمة لتعزيز العمق --}}
         <div class="absolute top-[-10%] left-[-10%] w-[45%] h-[45%] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
@@ -82,7 +82,7 @@ $resetFilters = function() {
 
         <div class="p-4 md:p-8">
             {{-- 3. شريط البحث: نهج الزجاج (Glassmorphism) --}}
-            <div class="max-w-md mx-auto mb-12" data-aos="fade-up">
+            <div class="sticky top-2 z-[40] max-w-md mx-auto mb-8 px-4" data-aos="fade-up">
                 <div class="relative group">
                     <x-input
                         wire:model.live.debounce.300ms="search"
