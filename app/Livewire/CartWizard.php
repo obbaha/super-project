@@ -359,8 +359,11 @@ public function applyCoupon(): void
 
         // Process image URLs for components
         $processedItems = $items->map(function ($item) {
+
+        $productId = \App\Models\ProductVariation::where('id', $item->variation_id)->value('product_id');
             return [
                 'variation_id' => $item->variation_id,
+                'product_id' => $productId,
                 'name' => $item->name,
                 'image' => $item->image ? Storage::url($item->image) : null,
                 'quantity' => $item->quantity,
@@ -423,7 +426,7 @@ public function shareCart()
 
     foreach ($items as $item) {
         // تأكد أن الراوت يستقبل الـ variation_id فعلاً
-        $url = url("/products/" . $item['variation_id']);
+        $url = url("/products/" . ($item['product_id'] ?? $item['variation_id']));
         $message .= "• *" . $item['name'] . "*\n";
         $message .= "🔗 " . $url . "\n\n";
     }
