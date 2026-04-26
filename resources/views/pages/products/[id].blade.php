@@ -29,6 +29,12 @@ $addToCart = function (CartService $cartService, int $selectedVariationId, int $
 
     $cartService->add($selectedVariationId, $quantity);
     $this->dispatch('cart-updated');
+    $this->success(
+        title: 'تمت الإضافة بنجاح',
+        description: 'تمت إضافة القطعة إلى حقيبتك الفاخرة',
+        icon: 'o-shopping-bag',
+        position: 'toast-bottom toast-start'
+    );
 };
 
 ?>
@@ -95,7 +101,24 @@ selectVariation(id) {
 
     incrementQty() { this.quantity++ },
     decrementQty() { if(this.quantity > 1) this.quantity-- },
-    fullscreenImage: false
+    fullscreenImage: false,
+
+{{-- دالة المشاركة الذكية --}}
+shareProduct() {
+        if (navigator.share) {
+            navigator.share({
+                title: '{{ $this->product->name }}',
+                text: 'اكتشفي هذه القطعة الفريدة من سوريا شوب',
+                url: window.location.href
+            }).catch(() => {}); {{-- لتجنب أخطاء الإلغاء --}}
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            {{-- تنبيه ناعم يتناسب مع فخامة المتجر --}}
+            $wire.success('تم نسخ الرابط بنجاح', '', 'toast-bottom toast-start');
+        }
+    }
+
+
 }" class="min-h-screen py-12 px-4 md:px-8 bg-main-gradient text-neutral overflow-x-hidden" dir="rtl">
 
         <div class="max-w-6xl mx-auto">
@@ -154,9 +177,17 @@ selectVariation(id) {
                         <span class="text-primary text-xs uppercase tracking-[0.4em] font-bold mb-3 block">
                             {{ $this->product->category->name ?? 'مجموعة فاخرة' }}
                         </span>
-                        <h1 class="text-4xl md:text-5xl font-black mb-4 leading-tight uppercase tracking-tighter">
-                            {{ $this->product->name }}
-                        </h1>
+<div class="flex items-start justify-between gap-4">
+    <h1 class="text-4xl md:text-5xl font-black mb-4 leading-tight uppercase tracking-tighter">
+        {{ $this->product->name }}
+    </h1>
+
+    {{-- زر المشاركة الزجاجي --}}
+    <button @click="shareProduct"
+            class="mt-2 p-4 rounded-2xl bg-white/30 backdrop-blur-md border border-white/40 text-primary hover:bg-primary hover:text-white transition-all duration-500 shadow-sm group">
+        <x-icon name="o-share" class="w-6 h-6 group-hover:scale-110 transition-transform" />
+    </button>
+</div>
                         <p class="text-neutral/60 text-lg leading-relaxed max-w-xl">
                             {{ $this->product->description }}
                         </p>

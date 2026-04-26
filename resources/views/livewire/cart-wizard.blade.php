@@ -4,7 +4,7 @@
         <button
             wire:click="open"
             class="relative bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-xl shadow-primary/20 transition-all hover:scale-110 active:scale-95 flex items-center justify-center group">
-            <x-icon name="o-shopping-cart" class="w-8 h-8" />
+            <x-icon name="o-shopping-bag" class="w-8 h-8" />
             {{-- عداد المنتجات - استخدام اللون الثانوي للتمييز --}}
 
 
