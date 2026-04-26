@@ -125,7 +125,7 @@ $resetFilters = function() {
 </div>
 
             {{-- 5. شبكة المنتجات --}}
-            <div class="max-w-[95%] mx-auto px-4" id="products" wire:loading.class="opacity-50 pointer-events-none">
+            <div class="max-w-7xl mx-auto" id="products" wire:loading.class="opacity-50 pointer-events-none">
                 @if($this->products->isNotEmpty())
 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-10">
                             @foreach($this->products as $product)

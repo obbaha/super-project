@@ -128,6 +128,16 @@ shareProduct() {
                 <span>العودة للمتجر</span>
             </a>
 
+{{-- عنوان المنتج للجوال فقط (يظهر فوق الصور) --}}
+<div class="lg:hidden mb-6" data-aos="fade-down">
+    <span class="text-primary text-xs uppercase tracking-[0.4em] font-bold mb-2 block text-center">
+        {{ $this->product->category->name ?? 'مجموعة فاخرة' }}
+    </span>
+    <h1 class="text-3xl font-black text-center leading-tight uppercase tracking-tighter">
+        {{ $this->product->name }}
+    </h1>
+</div>
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
 {{-- الجانب الأيمن: معرض الصور المطور بنظام الألبوم --}}
@@ -151,7 +161,7 @@ shareProduct() {
     </div>
 
 {{-- الألبوم المصغر: يعرض الآن صور الموديل المختار فقط --}}
-<div class="flex gap-4 overflow-x-auto pb-4 pt-2 custom-scrollbar px-2 max-w-full">
+<div class="flex gap-4 overflow-x-auto pb-0 pt-2 custom-scrollbar px-2 max-w-full">
 
 <template x-for="(imgData, index) in allImages" :key="index">
     <button
@@ -171,13 +181,47 @@ shareProduct() {
 </div>
 </div>
 
+
+
+{{-- السعر والموديلات للجوال فقط --}}
+<div class="lg:hidden space-y-2 -mt-2">
+    {{-- السعر --}}
+    <div class="flex items-baseline justify-center gap-4 bg-white/30 backdrop-blur-md p-4 rounded-3xl border border-white/40">
+        <span class="text-3xl font-black text-neutral" x-text="new Intl.NumberFormat().format(currentPrice)"></span>
+        <span class="text-primary font-bold text-sm">ل.س</span>
+    </div>
+
+    {{-- اختيار الموديل --}}
+    <div class="space-y-3">
+        <h3 class="text-xs font-bold text-neutral/40 uppercase tracking-widest text-center">اختر الموديل</h3>
+        <div class="grid grid-cols-2 gap-2">
+            <template x-for="variation in variations" :key="variation.id">
+                <button @click="selectVariation(variation.id)"
+                    class="px-3 py-3 rounded-xl border-2 transition-all duration-300 font-bold text-xs flex flex-col items-center gap-1"
+                    :class="[
+                        !variation.isAvailable ? 'opacity-40 cursor-not-allowed' : '',
+                        selectedVariationId == variation.id
+                            ? 'border-primary bg-primary text-white shadow-lg shadow-primary/20'
+                            : 'border-white/50 bg-white/30 backdrop-blur-sm text-neutral hover:border-primary/50'
+                    ]"
+                    :disabled="!variation.isAvailable">
+                    <span x-text="variation.name"></span>
+                </button>
+            </template>
+        </div>
+    </div>
+</div>
+
+
+
+
                 {{-- الجانب الأيسر: المعلومات والتحكم --}}
                 <div class="space-y-8" data-aos="fade-left">
                     <div>
-                        <span class="text-primary text-xs uppercase tracking-[0.4em] font-bold mb-3 block">
+                        <span class="hidden lg:block text-primary text-xs uppercase tracking-[0.4em] font-bold mb-3">
                             {{ $this->product->category->name ?? 'مجموعة فاخرة' }}
                         </span>
-<div class="flex items-start justify-between gap-4">
+<div class="hidden lg:flex items-start justify-between gap-4">
     <h1 class="text-4xl md:text-5xl font-black mb-4 leading-tight uppercase tracking-tighter">
         {{ $this->product->name }}
     </h1>
@@ -194,13 +238,13 @@ shareProduct() {
                     </div>
 
                     {{-- السعر --}}
-                    <div class="flex items-baseline gap-4 bg-white/30 backdrop-blur-md p-6 rounded-3xl border border-white/40 w-max">
+                    <div class="hidden lg:flex items-baseline gap-4 bg-white/30 backdrop-blur-md p-6 rounded-3xl border border-white/40 w-max">
                         <span class="text-4xl font-black text-neutral" x-text="new Intl.NumberFormat().format(currentPrice)"></span>
                         <span class="text-primary font-bold">ل.س</span>
                     </div>
 
                     {{-- خيارات المنتج (Variations) --}}
-                    <div class="space-y-4">
+                    <div class="hidden lg:block space-y-4">
                         <h3 class="text-sm font-bold text-neutral/40 uppercase tracking-widest">اختر الموديل</h3>
                         <div class="grid grid-cols-2 gap-3">
                             <template x-for="variation in variations" :key="variation.id">
@@ -227,27 +271,34 @@ shareProduct() {
                     </div>
 
                     {{-- التحكم بالكمية والطلب --}}
-                    <div class="pt-6 space-y-6">
-                        <div class="flex items-center gap-6">
-                            <div class="flex items-center bg-white/50 backdrop-blur-md border border-white/80 rounded-2xl p-2 shadow-sm">
-                                <button @click="decrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">-</button>
-                                <span class="w-12 text-center text-xl font-black text-neutral" x-text="quantity"></span>
-                                <button @click="incrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">+</button>
-                            </div>
-                        </div>
+{{-- حاوية العداد والمشاركة فقط --}}
+<div class="flex items-center gap-3 w-full lg:w-max mb-6">
+    <div class="flex items-center bg-white/50 backdrop-blur-md border border-white/80 rounded-2xl p-2 shadow-sm">
+        <button @click="decrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">-</button>
+        <span class="w-12 text-center text-xl font-black text-neutral" x-text="quantity"></span>
+        <button @click="incrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">+</button>
+    </div>
 
-                        {{-- زر الإضافة للسلة --}}
-                        <div class="relative group">
-                            <x-button
-                                label="أضف للحقيبة الفاخرة"
-                                icon="o-shopping-bag"
-                                x-bind:disabled="!isAvailable"
-                                @click="$wire.addToCart(selectedVariationId, quantity)"
-                                spinner="addToCart"
-                                class="w-full h-20 rounded-[2rem] text-xl font-bold transition-all duration-500 border-none shadow-2xl btn-primary text-white"
-                                x-bind:class="!isAvailable && 'bg-neutral/10 text-neutral/30 cursor-not-allowed shadow-none'"
-                            />
-                        </div>
+    {{-- زر المشاركة للجوال --}}
+    <button @click="shareProduct"
+            class="lg:hidden flex-1 flex items-center justify-center gap-2 h-[58px] rounded-2xl bg-white/50 backdrop-blur-md border border-white/80 text-primary shadow-sm active:scale-95 transition-transform">
+        <x-icon name="o-share" class="w-5 h-5" />
+        <span class="font-bold text-sm">مشاركة</span>
+    </button>
+</div>
+
+{{-- زر الإضافة للسلة مستقلاً في الأسفل --}}
+<div class="relative group pt-2">
+    <x-button
+        label="أضف للحقيبة الفاخرة"
+        icon="o-shopping-bag"
+        x-bind:disabled="!isAvailable"
+        @click="$wire.addToCart(selectedVariationId, quantity)"
+        spinner="addToCart"
+        class="w-full h-20 rounded-[2rem] text-xl font-bold transition-all duration-500 border-none shadow-2xl btn-primary text-white"
+        x-bind:class="!isAvailable && 'bg-neutral/10 text-neutral/30 cursor-not-allowed shadow-none'"
+    />
+</div>
 
                         {{-- حالة التوفر --}}
                         <template x-if="!isAvailable">
@@ -259,7 +310,7 @@ shareProduct() {
                     </div>
                 </div>
             </div>
-        </div>
+
 
         <style>
             .custom-scrollbar::-webkit-scrollbar { height: 4px; }
@@ -283,7 +334,7 @@ shareProduct() {
 
                 {{-- زر الإغلاق --}}
                 <button @click="fullscreenImage = false"
-                        class="absolute top-8 left-8 text-white/50 hover:text-white transition-colors z-[210]">
+                        class="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[210]">
                     <x-icon name="o-x-mark" class="w-12 h-12" />
                 </button>
 
