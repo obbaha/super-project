@@ -1,22 +1,21 @@
 <div dir="rtl" x-cloak class="font-cairo">
     {{-- الزر العائم - استخدام ألوان primary من الإعدادات --}}
-    <div class="fixed bottom-6 left-6 z-50">
-        <button
-            wire:click="open"
-            class="relative bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-xl shadow-primary/20 transition-all hover:scale-110 active:scale-95 flex items-center justify-center group">
-            <x-icon name="o-shopping-bag" class="w-8 h-8" />
+    <div class="fixed bottom-7 lg:bottom-6 left-5 z-[210]">
+{{-- زيادة الـ padding إلى p-5 وحجم الأيقونة إلى w-9 h-9 --}}
+<button
+    wire:click="open"
+    class="relative bg-primary hover:bg-primary-dark text-white p-5 rounded-full shadow-xl shadow-primary/20 transition-all hover:scale-110 active:scale-95 flex items-center justify-center group">
+    <x-icon name="o-shopping-bag" class="w-9 h-9" />
             {{-- عداد المنتجات - استخدام اللون الثانوي للتمييز --}}
 
 
 
-    {{-- حاوية الرسالة اللطيفة: تظهر بجانب الزر العائم --}}
-    <div class="absolute bottom-full mb-3 left-0 whitespace-nowrap animate-bounce-slow">
-        <div class="bg-white/80 backdrop-blur-md text-primary text-[11px] font-bold px-4 py-2 rounded-2xl shadow-xl border border-primary/10 relative">
-            <span>قطعكِ المختارة بانتظاركِ.. ✨</span>
-            {{-- سهم صغير يشير للأسفل باتجاه الزر --}}
-            <div class="absolute top-full left-6 w-2 h-2 bg-white/80 rotate-45 -mt-1 border-b border-r border-primary/5"></div>
-        </div>
-    </div>
+{{-- العداد البصري: يظهر فقط إذا كان هناك منتجات --}}
+@if(!empty($cartSummary['count']) && $cartSummary['count'] > 0)
+    <span class="absolute -top-1 -right-1 bg-white text-primary text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full shadow-lg border-2 border-primary animate-pulse">
+        {{ $cartSummary['count'] }}
+    </span>
+@endif
 
 
 

@@ -119,7 +119,8 @@ shareProduct() {
     }
 
 
-}" class="min-h-screen py-12 px-4 md:px-8 bg-main-gradient text-neutral overflow-x-hidden" dir="rtl">
+
+}" class="min-h-screen py-12 pb-60 lg:pb-12 px-4 md:px-8 bg-main-gradient text-neutral overflow-x-hidden" dir="rtl">
 
         <div class="max-w-6xl mx-auto">
             {{-- زر العودة --}}
@@ -151,8 +152,7 @@ shareProduct() {
     </div>
 
 {{-- الألبوم المصغر: يعرض الآن صور الموديل المختار فقط --}}
-<div class="flex gap-4 overflow-x-auto pb-0 pt-2 custom-scrollbar px-2 max-w-full">
-
+<div class="flex gap-4 overflow-x-auto overflow-y-hidden py-4 custom-scrollbar px-2 max-w-full">
 <template x-for="(imgData, index) in allImages" :key="index">
     <button
         {{-- عند النقر: نغير الموديل بناءً على الصورة، ونغير فهرس الصورة النشطة --}}
@@ -187,13 +187,14 @@ shareProduct() {
         <div class="grid grid-cols-2 gap-2">
             <template x-for="variation in variations" :key="variation.id">
                 <button @click="selectVariation(variation.id)"
-                    class="px-3 py-3 rounded-xl border-2 transition-all duration-300 font-bold text-xs flex flex-col items-center gap-1"
-                    :class="[
-                        !variation.isAvailable ? 'opacity-40 cursor-not-allowed' : '',
-                        selectedVariationId == variation.id
-                            ? 'border-primary bg-primary text-white shadow-lg shadow-primary/20'
-                            : 'border-white/50 bg-white/30 backdrop-blur-sm text-neutral hover:border-primary/50'
-                    ]"
+                    class="px-3 py-3 rounded-2xl border transition-all duration-300 font-bold text-xs flex flex-col items-center gap-1"
+{{-- قللنا سماكة الحدود وجعلنا الخلفية في وضع عدم الاختيار أكثر بياضاً لزيادة الفخامة --}}
+:class="[
+    !variation.isAvailable ? 'opacity-40 cursor-not-allowed' : '',
+    selectedVariationId == variation.id
+        ? 'border-primary bg-primary text-white shadow-md shadow-primary/30 scale-[1.02]'
+        : 'border-neutral-100 bg-white text-neutral/70 hover:border-primary/30 shadow-sm'
+]"
                     :disabled="!variation.isAvailable">
                     <span x-text="variation.name"></span>
                 </button>
@@ -260,35 +261,9 @@ shareProduct() {
                         </div>
                     </div>
 
-                    {{-- التحكم بالكمية والطلب --}}
-{{-- حاوية العداد والمشاركة فقط --}}
-<div class="flex items-center gap-3 w-full lg:w-max mb-6">
-    <div class="flex items-center bg-white/50 backdrop-blur-md border border-white/80 rounded-2xl p-2 shadow-sm">
-        <button @click="decrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">-</button>
-        <span class="w-12 text-center text-xl font-black text-neutral" x-text="quantity"></span>
-        <button @click="incrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">+</button>
-    </div>
 
-    {{-- زر المشاركة للجوال --}}
-    <button @click="shareProduct"
-            class="lg:hidden flex-1 flex items-center justify-center gap-2 h-[58px] rounded-2xl bg-white/50 backdrop-blur-md border border-white/80 text-primary shadow-sm active:scale-95 transition-transform">
-        <x-icon name="o-share" class="w-5 h-5" />
-        <span class="font-bold text-sm">مشاركة</span>
-    </button>
-</div>
 
-{{-- زر الإضافة للسلة مستقلاً في الأسفل --}}
-<div class="relative group pt-2">
-    <x-button
-        label="أضف للحقيبة الفاخرة"
-        icon="o-shopping-bag"
-        x-bind:disabled="!isAvailable"
-        @click="$wire.addToCart(selectedVariationId, quantity)"
-        spinner="addToCart"
-        class="w-full h-20 rounded-[2rem] text-xl font-bold transition-all duration-500 border-none shadow-2xl btn-primary text-white"
-        x-bind:class="!isAvailable && 'bg-neutral/10 text-neutral/30 cursor-not-allowed shadow-none'"
-    />
-</div>
+
 
                         {{-- حالة التوفر --}}
                         <template x-if="!isAvailable">
@@ -306,6 +281,56 @@ shareProduct() {
             .custom-scrollbar::-webkit-scrollbar { height: 4px; }
             .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(212, 165, 116, 0.3); border-radius: 10px; }
         </style>
+
+
+
+
+
+
+
+
+
+
+                    {{-- التحكم بالكمية والطلب --}}
+
+<div class="lg:hidden fixed bottom-0 left-0 w-full z-[200] bg-white rounded-t-[2.5rem] p-6 pb-safe shadow-[0_-15px_40px_rgba(0,0,0,0.12)] border-t border-neutral/5">
+
+
+{{-- حاوية العداد والمشاركة فقط --}}
+<div class="flex items-center gap-3 w-full lg:w-max mb-6">
+    <div class="flex items-center bg-white border border-neutral-100 rounded-2xl p-2 shadow-xl shadow-neutral-950/10">
+        <button @click="decrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">-</button>
+        <span class="w-12 text-center text-xl font-black text-neutral" x-text="quantity"></span>
+        <button @click="incrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">+</button>
+    </div>
+
+    {{-- زر المشاركة للجوال --}}
+    <button @click="shareProduct"
+            class="lg:hidden flex-1 flex items-center justify-center gap-2 h-[58px] rounded-2xl bg-white border border-neutral-100 text-primary shadow-xl shadow-neutral-950/10 active:scale-95 transition-transform">
+        <x-icon name="o-share" class="w-5 h-5" />
+        <span class="font-bold text-sm">مشاركة</span>
+    </button>
+</div>
+
+{{-- زر الإضافة للسلة مستقلاً في الأسفل --}}
+<div class="relative group mt-2 ml-20 lg:ml-0">
+    <x-button
+        label="أضف للحقيبة الفاخرة"
+        icon="o-shopping-bag"
+        x-bind:disabled="!isAvailable"
+        @click="$wire.addToCart(selectedVariationId, quantity)"
+        spinner="addToCart"
+        class="w-full h-20 rounded-[2rem] text-xl font-bold transition-all duration-500 border-none shadow-2xl btn-primary text-white"
+        x-bind:class="!isAvailable && 'bg-neutral/10 text-neutral/30 cursor-not-allowed shadow-none'"
+    />
+</div>
+
+
+
+</div>
+
+
+
 
 
 
