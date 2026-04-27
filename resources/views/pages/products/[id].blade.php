@@ -263,6 +263,36 @@ shareProduct() {
 
 
 
+{{-- حاوية العداد والمشاركة فقط --}}
+<div class="hidden lg:flex items-center gap-3 w-full lg:w-max mb-6">
+    <div class="flex items-center bg-white border border-neutral-100 rounded-2xl p-2 shadow-xl shadow-neutral-950/10">
+        <button @click="decrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">-</button>
+        <span class="w-12 text-center text-xl font-black text-neutral" x-text="quantity"></span>
+        <button @click="incrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">+</button>
+    </div>
+
+    {{-- زر المشاركة للجوال --}}
+    <button @click="shareProduct"
+            class="lg:hidden flex-1 flex items-center justify-center gap-2 h-[58px] rounded-2xl bg-white border border-neutral-100 text-primary shadow-xl shadow-neutral-950/10 active:scale-95 transition-transform">
+        <x-icon name="o-share" class="w-5 h-5" />
+        <span class="font-bold text-sm">مشاركة</span>
+    </button>
+</div>
+
+{{-- زر الإضافة للسلة مستقلاً في الأسفل --}}
+<div class="hidden lg:block relative group mt-2 ml-20 lg:ml-0">
+    <x-button
+        label="أضف للحقيبة الفاخرة"
+        icon="o-shopping-bag"
+        x-bind:disabled="!isAvailable"
+        @click="$wire.addToCart(selectedVariationId, quantity)"
+        spinner="addToCart"
+        class="w-full h-20 rounded-[2rem] text-xl font-bold transition-all duration-500 border-none shadow-2xl btn-primary text-white"
+        x-bind:class="!isAvailable && 'bg-neutral/10 text-neutral/30 cursor-not-allowed shadow-none'"
+    />
+</div>
+
+
 
 
                         {{-- حالة التوفر --}}
