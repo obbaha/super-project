@@ -1,12 +1,12 @@
 <div dir="rtl" x-cloak class="font-cairo">
     {{-- الزر العائم - استخدام ألوان primary من الإعدادات --}}
-    <div class="fixed bottom-7 lg:bottom-6 left-5 z-[210]">
+    <div class="fixed bottom-5 lg:bottom-6 left-5 z-[210]">
 {{-- زيادة الـ padding إلى p-5 وحجم الأيقونة إلى w-9 h-9 --}}
+{{-- تصغير الـ padding إلى p-4 وحجم الأيقونة إلى w-7 h-7 --}}
 <button
     wire:click="open"
-    class="relative bg-primary hover:bg-primary-dark text-white p-5 rounded-full shadow-xl shadow-primary/20 transition-all hover:scale-110 active:scale-95 flex items-center justify-center group">
-    <x-icon name="o-shopping-bag" class="w-9 h-9" />
-            {{-- عداد المنتجات - استخدام اللون الثانوي للتمييز --}}
+    class="relative bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-xl shadow-primary/20 transition-all hover:scale-110 active:scale-95 flex items-center justify-center group">
+    <x-icon name="o-shopping-bag" class="w-7 h-7" />
 
 
 

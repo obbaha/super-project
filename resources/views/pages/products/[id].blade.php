@@ -120,7 +120,8 @@ shareProduct() {
 
 
 
-}" class="min-h-screen py-12 pb-60 lg:pb-12 px-4 md:px-8 bg-main-gradient text-neutral overflow-x-hidden" dir="rtl">
+}" class="min-h-screen pt-2 pb-60 lg:py-12 px-4 md:px-8 bg-main-gradient text-neutral overflow-x-hidden" dir="rtl">
+
 
         <div class="max-w-6xl mx-auto">
             {{-- زر العودة --}}
@@ -151,6 +152,18 @@ shareProduct() {
         </div>
     </div>
 
+
+
+
+{{-- السعر والموديلات للجوال فقط --}}
+<div class="lg:hidden space-y-4 -mt-2">
+    {{-- السعر --}}
+    <div class="flex items-baseline gap-2 bg-white/40 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/50 shadow-sm w-max">
+        <span class="text-3xl font-black text-neutral" x-text="new Intl.NumberFormat().format(currentPrice)"></span>
+        <span class="text-primary font-bold text-sm">ل.س</span>
+    </div>
+
+
 {{-- الألبوم المصغر: يعرض الآن صور الموديل المختار فقط --}}
 <div class="flex gap-4 overflow-x-auto overflow-y-hidden py-4 custom-scrollbar px-2 max-w-full">
 <template x-for="(imgData, index) in allImages" :key="index">
@@ -173,13 +186,6 @@ shareProduct() {
 
 
 
-{{-- السعر والموديلات للجوال فقط --}}
-<div class="lg:hidden space-y-2 -mt-2">
-    {{-- السعر --}}
-    <div class="flex items-baseline justify-center gap-4 bg-white/30 backdrop-blur-md p-4 rounded-3xl border border-white/40">
-        <span class="text-3xl font-black text-neutral" x-text="new Intl.NumberFormat().format(currentPrice)"></span>
-        <span class="text-primary font-bold text-sm">ل.س</span>
-    </div>
 
     {{-- اختيار الموديل --}}
     <div class="space-y-3">
@@ -323,21 +329,19 @@ shareProduct() {
 
                     {{-- التحكم بالكمية والطلب --}}
 
-<div class="lg:hidden fixed bottom-0 left-0 w-full z-[200] bg-white rounded-t-[2.5rem] p-6 pb-safe shadow-[0_-15px_40px_rgba(0,0,0,0.12)] border-t border-neutral/5">
+<div class="lg:hidden fixed bottom-0 left-0 w-full z-[200] bg-white rounded-t-[2rem] p-4 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.08)] border-t border-neutral/5">
 
 
-{{-- حاوية العداد والمشاركة فقط --}}
-<div class="flex items-center gap-3 w-full lg:w-max mb-6">
-    <div class="flex items-center bg-white border border-neutral-100 rounded-2xl p-2 shadow-xl shadow-neutral-950/10">
-        <button @click="decrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">-</button>
-        <span class="w-12 text-center text-xl font-black text-neutral" x-text="quantity"></span>
-        <button @click="incrementQty" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white transition-colors text-primary font-bold text-xl">+</button>
+<div class="flex items-center gap-2 w-full lg:w-max mb-4">
+    <div class="flex items-center bg-white border border-neutral-100 rounded-xl p-1 shadow-md shadow-neutral-950/5">
+        <button @click="decrementQty" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white transition-colors text-primary font-bold text-lg">-</button>
+        <span class="w-10 text-center text-lg font-black text-neutral" x-text="quantity"></span>
+        <button @click="incrementQty" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white transition-colors text-primary font-bold text-lg">+</button>
     </div>
 
     {{-- زر المشاركة للجوال --}}
     <button @click="shareProduct"
             class="lg:hidden flex-1 flex items-center justify-center gap-2 h-[58px] rounded-2xl bg-white border border-neutral-100 text-primary shadow-xl shadow-neutral-950/10 active:scale-95 transition-transform">
-        <x-icon name="o-share" class="w-5 h-5" />
         <span class="font-bold text-sm">مشاركة</span>
     </button>
 </div>
@@ -350,7 +354,7 @@ shareProduct() {
         x-bind:disabled="!isAvailable"
         @click="$wire.addToCart(selectedVariationId, quantity)"
         spinner="addToCart"
-        class="w-full h-20 rounded-[2rem] text-xl font-bold transition-all duration-500 border-none shadow-2xl btn-primary text-white"
+        class="w-full h-16 rounded-2xl text-lg font-bold transition-all duration-500 border-none shadow-xl btn-primary text-white"
         x-bind:class="!isAvailable && 'bg-neutral/10 text-neutral/30 cursor-not-allowed shadow-none'"
     />
 </div>
