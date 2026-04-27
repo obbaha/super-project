@@ -128,16 +128,6 @@ shareProduct() {
                 <span>العودة للمتجر</span>
             </a>
 
-{{-- عنوان المنتج للجوال فقط (يظهر فوق الصور) --}}
-<div class="lg:hidden mb-6" data-aos="fade-down">
-    <span class="text-primary text-xs uppercase tracking-[0.4em] font-bold mb-2 block text-center">
-        {{ $this->product->category->name ?? 'مجموعة فاخرة' }}
-    </span>
-    <h1 class="text-3xl font-black text-center leading-tight uppercase tracking-tighter">
-        {{ $this->product->name }}
-    </h1>
-</div>
-
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
 {{-- الجانب الأيمن: معرض الصور المطور بنظام الألبوم --}}
