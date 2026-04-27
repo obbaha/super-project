@@ -195,6 +195,12 @@ $resetFilters = function() {
                         <p class="text-primary text-xs uppercase tracking-[0.8em] font-semibold">Luxury Concept</p>
                         <div class="h-[1px] w-12 bg-primary/20"></div>
                     </div>
+
+<button wire:click="$set('showContact', true)" class="text-[11px] text-primary font-bold uppercase tracking-[0.3em] px-8 py-3 border border-primary/20 rounded-full hover:bg-primary hover:text-white transition-all duration-500">
+        تواصل معنا
+    </button>
+
+
                     {{-- باقي حقوق الملكية --}}
                     <div class="pt-12 border-t border-primary/5 w-full max-w-2xl text-[10px] text-neutral/30 uppercase tracking-[0.4em]">
                         &copy; 2026 Syria Shop. Crafted for Elegance.
@@ -214,8 +220,8 @@ $resetFilters = function() {
                         <span class="text-primary text-xs uppercase tracking-widest font-bold mb-6 block">نحن بانتظارك</span>
                         <h2 class="text-4xl font-bold mb-8">لنصمم لكِ تجربة فريدة</h2>
                         <div class="grid gap-6">
-                            <x-button label="محادثة واتساب" icon="o-chat-bubble-left-right" class="btn-primary h-16 rounded-2xl text-white shadow-xl shadow-primary/20" />
-                            <x-button label="اتصال هاتفي" icon="o-phone" class="bg-white/20 backdrop-blur-md border-primary/10 h-16 rounded-2xl text-neutral font-bold" />
+                            <x-button label="محادثة واتساب" icon="o-chat-bubble-left-right" link="https://wa.me/963930761582" external class="btn-primary h-16 rounded-2xl text-white shadow-xl shadow-primary/20" />
+                            <x-button label="اتصال هاتفي" icon="o-phone" link="tel:+963930761582" class="bg-white/20 backdrop-blur-md border-primary/10 h-16 rounded-2xl text-neutral font-bold" />
                         </div>
                     </div>
                 </div>
