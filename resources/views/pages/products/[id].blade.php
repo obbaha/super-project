@@ -184,13 +184,7 @@ shareProduct() {
 
 
 
-{{-- السعر والموديلات للجوال فقط --}}
-<div class="lg:hidden space-y-4 -mt-2">
-    {{-- السعر --}}
-    <div class="flex items-baseline gap-2 bg-white/40 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/50 shadow-sm w-max">
-        <span class="text-3xl font-black text-neutral" x-text="new Intl.NumberFormat().format(currentPrice)"></span>
-        <span class="text-primary font-bold text-sm">ل.س</span>
-    </div>
+
 
 
 {{-- الألبوم المصغر: يعرض الآن صور الموديل المختار فقط --}}
@@ -213,7 +207,13 @@ shareProduct() {
 </div>
 </div>
 
-
+{{-- السعر والموديلات للجوال فقط --}}
+<div class="lg:hidden space-y-4 -mt-2">
+    {{-- السعر --}}
+    <div class="flex items-baseline gap-2 bg-white/40 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/50 shadow-sm w-max">
+        <span class="text-3xl font-black text-neutral" x-text="new Intl.NumberFormat().format(currentPrice)"></span>
+        <span class="text-primary font-bold text-sm">ل.س</span>
+    </div>
 
 
     {{-- اختيار الموديل --}}
