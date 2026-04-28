@@ -148,7 +148,7 @@ shareProduct() {
      x-data="{ touchStart: 0 }">
 
     <template x-for="(imgData, index) in allImages" :key="index">
-<div x-show="activeImageIndex === index"
+<div x-show="activeImageIndex === index" class="absolute inset-0 w-full h-full"
 x-transition:enter="transition all duration-700 cubic-bezier(0.4, 0, 0.2, 1)"
      :x-transition:enter-start="slideDirection === 'forward' ? 'opacity-0 translate-x-12 scale-95' : 'opacity-0 -translate-x-12 scale-95'"
      x-transition:enter-end="opacity-100 translate-x-0 scale-100"
