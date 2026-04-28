@@ -76,6 +76,18 @@ get allImages() {
     return images;
 },
 
+get thumbnailImages() {
+    return this.variations.map(v => {
+        return {
+            url: (v.images && v.images.length > 0) ? v.images[0] : null,
+            variationId: v.id
+        };
+    }).filter(img => img.url);
+},
+
+
+
+
 // تعديل currentImage لتعتمد على المصفوفة الشاملة
 get currentImage() {
     return this.allImages[this.activeImageIndex]?.url || '';
@@ -187,20 +199,20 @@ x-transition:enter="transition all duration-700 cubic-bezier(0.4, 0, 0.2, 1)"
 
 
 
-{{-- الألبوم المصغر: يعرض الآن صور الموديل المختار فقط --}}
+{{-- الألبوم المصغر: يعرض الآن الصورة الأساسية لكل تنوع --}}
 <div class="flex gap-4 overflow-x-auto overflow-y-hidden py-4 custom-scrollbar px-2 max-w-full">
-<template x-for="(imgData, index) in allImages" :key="index">
+<template x-for="(imgData, index) in thumbnailImages" :key="index">
     <button
-        {{-- عند النقر: نغير الموديل بناءً على الصورة، ونغير فهرس الصورة النشطة --}}
-        @click="activeImageIndex = index; selectedVariationId = imgData.variationId"
+        {{-- عند النقر: نختار التنوع ونحدث المعرض الرئيسي --}}
+        @click="selectVariation(imgData.variationId)"
         class="relative flex-shrink-0 w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all duration-300"
-        :class="activeImageIndex == index
+        :class="selectedVariationId == imgData.variationId
             ? 'border-primary ring-4 ring-primary/10 scale-110 shadow-lg'
             : 'border-white/40 hover:border-primary/50 opacity-70 hover:opacity-100'"
     >
         <img :src="imgData.url" class="w-full h-full object-cover" />
 
-        <div x-show="activeImageIndex != index" class="absolute inset-0 bg-white/10"></div>
+        <div x-show="selectedVariationId != imgData.variationId" class="absolute inset-0 bg-white/10"></div>
     </button>
 </template>
 
