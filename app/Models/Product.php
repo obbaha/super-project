@@ -44,10 +44,20 @@ public function category(): BelongsTo
 
 public function getFeaturedImageAttribute()
 {
-    // نبحث عن أول تنوع يمتلك صورة
-    $variationWithImage = $this->variations->whereNotNull('featured_image_id')->first();
+    // 1. الأولوية لأول تنوع "متاح" ويمتلك صورة مثبتة (المثالي)
+    $image = $this->variations->where('is_available', true)->whereNotNull('featured_image_id')->first()?->featuredImage;
 
-    return $variationWithImage ? $variationWithImage->featuredImage : null;
+    // 2. إذا لم يجد، يبحث في أي تنوع يمتلك صورة حتى لو غير متاح
+    if (!$image) {
+        $image = $this->variations->whereNotNull('featured_image_id')->first()?->featuredImage;
+    }
+
+    // 3. الخطة البديلة الأخيرة: أول صورة موجودة في معرض صور أي تنوع (Media)
+    if (!$image) {
+        $image = $this->variations->flatMap->media->first();
+    }
+
+    return $image;
 }
 
 /**

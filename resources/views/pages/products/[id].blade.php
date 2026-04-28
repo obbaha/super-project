@@ -103,8 +103,9 @@ selectVariation(id) {
     decrementQty() { if(this.quantity > 1) this.quantity-- },
     fullscreenImage: false,
     // دوال التنقل بين الصور
-    nextImage() { this.activeImageIndex = (this.activeImageIndex + 1) % this.allImages.length },
-    prevImage() { this.activeImageIndex = (this.activeImageIndex - 1 + this.allImages.length) % this.allImages.length },
+    prevImage() { this.slideDirection = 'back'; this.activeImageIndex = (this.activeImageIndex - 1 + this.allImages.length) % this.allImages.length },
+    nextImage() { this.slideDirection = 'forward'; this.activeImageIndex = (this.activeImageIndex + 1) % this.allImages.length },
+    slideDirection: 'forward',
 
 {{-- دالة المشاركة الذكية --}}
 shareProduct() {
@@ -143,18 +144,17 @@ shareProduct() {
 {{-- إضافة أحداث اللمس للسحب يميناً ويساراً --}}
 <div class="relative rounded-[2.5rem] overflow-hidden border border-white/50 shadow-xl aspect-square bg-white/10"
      @touchstart="touchStart = $event.touches[0].clientX"
-     @touchend="if (touchStart - $event.changedTouches[0].clientX > 50) nextImage(); if (touchStart - $event.changedTouches[0].clientX < -50) prevImage();"
+     @touchend="let diff = touchStart - $event.changedTouches[0].clientX; if (Math.abs(diff) > 50) { if (diff > 0) nextImage(); else prevImage(); }"
      x-data="{ touchStart: 0 }">
 
     <template x-for="(imgData, index) in allImages" :key="index">
-        <div x-show="activeImageIndex === index"
-             x-transition:enter="transition transform duration-700 ease-in-out"
-             x-transition:enter-start="translate-x-full"
-             x-transition:enter-end="translate-x-0"
-             x-transition:leave="transition transform duration-700 ease-in-out"
-             x-transition:leave-start="translate-x-0"
-             x-transition:leave-end="-translate-x-full"
-             class="absolute inset-0">
+<div x-show="activeImageIndex === index"
+     x-transition:enter="transition transform duration-700 ease-in-out"
+     :x-transition:enter-start="slideDirection === 'forward' ? 'translate-x-full' : '-translate-x-full'"
+     x-transition:enter-end="translate-x-0"
+     x-transition:leave="transition transform duration-700 ease-in-out"
+     x-transition:leave-start="translate-x-0"
+     :x-transition:leave-end="slideDirection === 'forward' ? '-translate-x-full' : 'translate-x-full'">
             <img :src="imgData.url"
                  @click="fullscreenImage = true"
                  class="w-full h-full object-cover"

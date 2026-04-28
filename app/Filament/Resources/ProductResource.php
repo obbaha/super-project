@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Clusters\Stock;
+use Awcodes\Curator\Components\Forms\CuratorPicker;
 
 class ProductResource extends Resource
 {
@@ -64,6 +65,27 @@ public static function getPluralModelLabel(): string
                 Forms\Components\Toggle::make('is_available')
                     ->label(__('Is Available'))
                     ->required(),
+
+
+// حقل الصورة الأساسية (المطلوب للموديل)
+CuratorPicker::make('featured_image_id')
+    ->label(__('Featured Image'))
+    ->relationship('featuredImage', 'id')
+    ->directory('product-variations/featured')
+    ->required(),
+
+// حقل معرض الصور (الألبوم)
+CuratorPicker::make('images')
+    ->label(__('Product Gallery'))
+    ->relationship('images', 'id')
+    ->multiple()
+    ->orderColumn('order')
+    ->directory('product-variations/gallery')
+    ->columnSpanFull(),
+
+
+
+
             ]);
     }
 

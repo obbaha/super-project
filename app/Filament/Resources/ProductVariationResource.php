@@ -70,6 +70,11 @@ public static function getPluralModelLabel(): string
                     ->numeric()
                     ->default(0),
 
+                CuratorPicker::make('featured_image_id')
+                    ->label(__('Featured Image'))
+                    ->relationship('featuredImage', 'id')
+                    ->directory('product-variations/featured'),
+
 Forms\Components\Toggle::make('is_available')
                 ->label(__('Is Available')) // متاح للعرض
                 ->default(true)
