@@ -102,6 +102,9 @@ selectVariation(id) {
     incrementQty() { this.quantity++ },
     decrementQty() { if(this.quantity > 1) this.quantity-- },
     fullscreenImage: false,
+    // دوال التنقل بين الصور
+    nextImage() { this.activeImageIndex = (this.activeImageIndex + 1) % this.allImages.length },
+    prevImage() { this.activeImageIndex = (this.activeImageIndex - 1 + this.allImages.length) % this.allImages.length },
 
 {{-- دالة المشاركة الذكية --}}
 shareProduct() {
@@ -137,11 +140,37 @@ shareProduct() {
     {{-- الإطار الرئيسي للصورة --}}
     <div class="relative group">
         <div class="absolute inset-0 bg-white/20 backdrop-blur-md rounded-[2.5rem] border border-white/30 shadow-2xl -rotate-2 group-hover:rotate-0 transition-transform duration-500 pointer-events-none"></div>
-        <div class="relative rounded-[2.5rem] overflow-hidden border border-white/50 shadow-xl aspect-square bg-white/10">
-            <img :src="currentImage"
-                @click="fullscreenImage = true"
-                 class="w-full h-full object-cover transition-all duration-700 transform hover:scale-105"
+{{-- إضافة أحداث اللمس للسحب يميناً ويساراً --}}
+<div class="relative rounded-[2.5rem] overflow-hidden border border-white/50 shadow-xl aspect-square bg-white/10"
+     @touchstart="touchStart = $event.touches[0].clientX"
+     @touchend="if (touchStart - $event.changedTouches[0].clientX > 50) nextImage(); if (touchStart - $event.changedTouches[0].clientX < -50) prevImage();"
+     x-data="{ touchStart: 0 }">
+
+    <template x-for="(imgData, index) in allImages" :key="index">
+        <div x-show="activeImageIndex === index"
+             x-transition:enter="transition transform duration-700 ease-in-out"
+             x-transition:enter-start="translate-x-full"
+             x-transition:enter-end="translate-x-0"
+             x-transition:leave="transition transform duration-700 ease-in-out"
+             x-transition:leave-start="translate-x-0"
+             x-transition:leave-end="-translate-x-full"
+             class="absolute inset-0">
+            <img :src="imgData.url"
+                 @click="fullscreenImage = true"
+                 class="w-full h-full object-cover"
                  alt="{{ $this->product->name }}">
+        </div>
+    </template>
+
+
+{{-- نقاط التنقل أسفل الصورة --}}
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10 pointer-events-none">
+    <template x-for="(img, index) in allImages" :key="index">
+        <div class="h-1.5 rounded-full transition-all duration-500"
+             :class="activeImageIndex === index ? 'bg-primary w-6' : 'bg-white/40 w-1.5'"></div>
+    </template>
+</div>
+
 
             {{-- ملصق نفاذ الكمية يظهر فقط عند اختيار موديل غير متاح --}}
             <template x-if="!isAvailable">
