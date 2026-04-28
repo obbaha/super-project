@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Awcodes\Curator\Components\Forms\CuratorPicker;
 
 use App\Models\Product;
 
@@ -67,6 +68,7 @@ public function form(Form $form): Form
                         ->maxLength(65535)
                         ->columnSpanFull(),
                 ])->columns(2),
+
         ]);
 }
 

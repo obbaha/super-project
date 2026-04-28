@@ -149,12 +149,12 @@ shareProduct() {
 
     <template x-for="(imgData, index) in allImages" :key="index">
 <div x-show="activeImageIndex === index"
-     x-transition:enter="transition transform duration-700 ease-in-out"
-     :x-transition:enter-start="slideDirection === 'forward' ? 'translate-x-full' : '-translate-x-full'"
-     x-transition:enter-end="translate-x-0"
-     x-transition:leave="transition transform duration-700 ease-in-out"
-     x-transition:leave-start="translate-x-0"
-     :x-transition:leave-end="slideDirection === 'forward' ? '-translate-x-full' : 'translate-x-full'">
+x-transition:enter="transition all duration-700 cubic-bezier(0.4, 0, 0.2, 1)"
+     :x-transition:enter-start="slideDirection === 'forward' ? 'opacity-0 translate-x-12 scale-95' : 'opacity-0 -translate-x-12 scale-95'"
+     x-transition:enter-end="opacity-100 translate-x-0 scale-100"
+     x-transition:leave="transition all duration-500 cubic-bezier(0.4, 0, 0.2, 1)"
+     x-transition:leave-start="opacity-100 scale-100"
+     :x-transition:leave-end="slideDirection === 'forward' ? 'opacity-0 -translate-x-12 scale-95' : 'opacity-0 translate-x-12 scale-95'">
             <img :src="imgData.url"
                  @click="fullscreenImage = true"
                  class="w-full h-full object-cover"
