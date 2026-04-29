@@ -111,12 +111,18 @@ selectVariation(id) {
     this.quantity = 1;
 },
 
+    offsetX: 0,
+    isDragging: false,
     incrementQty() { this.quantity++ },
     decrementQty() { if(this.quantity > 1) this.quantity-- },
     fullscreenImage: false,
     // دوال التنقل بين الصور
-    prevImage() { this.slideDirection = 'back'; this.activeImageIndex = (this.activeImageIndex - 1 + this.allImages.length) % this.allImages.length },
-    nextImage() { this.slideDirection = 'forward'; this.activeImageIndex = (this.activeImageIndex + 1) % this.allImages.length },
+    prevImage() {
+        if(this.activeImageIndex > 0) this.activeImageIndex--;
+    },
+    nextImage() {
+        if(this.activeImageIndex < this.allImages.length - 1) this.activeImageIndex++;
+    },
     slideDirection: 'forward',
 
 {{-- دالة المشاركة الذكية --}}
@@ -154,25 +160,55 @@ shareProduct() {
     <div class="relative group">
         <div class="absolute inset-0 bg-white/20 backdrop-blur-md rounded-[2.5rem] border border-white/30 shadow-2xl -rotate-2 group-hover:rotate-0 transition-transform duration-500 pointer-events-none"></div>
 {{-- إضافة أحداث اللمس للسحب يميناً ويساراً --}}
-<div class="relative rounded-[2.5rem] overflow-hidden border border-white/50 shadow-xl aspect-square bg-white/10"
-     @touchstart="touchStart = $event.touches[0].clientX"
-     @touchend="let diff = touchStart - $event.changedTouches[0].clientX; if (Math.abs(diff) > 50) { if (diff > 0) nextImage(); else prevImage(); }"
+<div class="relative rounded-[2.5rem] overflow-hidden border border-white/50 shadow-xl aspect-square bg-white/10 touch-pan-y"
+     @touchstart="touchStart = $event.touches[0].clientX; isDragging = true; offsetX = 0"
+@touchmove="
+    if(isDragging) {
+        let rawOffset = $event.touches[0].clientX - touchStart;
+        {{-- عند السحب لليمين (rawOffset > 0) في أول صورة، أو لليسار في آخر صورة --}}
+        if (activeImageIndex === 0 && rawOffset < 0) {
+            offsetX = rawOffset * 0.2;
+        } else if (activeImageIndex === allImages.length - 1 && rawOffset > 0) {
+            offsetX = rawOffset * 0.2;
+        } else {
+            offsetX = rawOffset;
+        }
+    }
+"
+{{-- التعديل في حدث @touchend --}}
+@touchend="
+    isDragging = false;
+    if (Math.abs(offsetX) > 80) {
+        // في RTL:
+        // السحب لليمين (offsetX > 0) يعني الانتقال للصورة التالية (Next)
+        // السحب لليسار (offsetX < 0) يعني الانتقال للصورة السابقة (Prev)
+        if (offsetX > 0 && activeImageIndex < allImages.length - 1) {
+            nextImage();
+        } else if (offsetX < 0 && activeImageIndex > 0) {
+            prevImage();
+        }
+    }
+    offsetX = 0;
+"
      x-data="{ touchStart: 0 }">
 
-    <template x-for="(imgData, index) in allImages" :key="index">
-<div x-show="activeImageIndex === index" class="absolute inset-0 w-full h-full"
-x-transition:enter="transition all duration-700 cubic-bezier(0.4, 0, 0.2, 1)"
-     :x-transition:enter-start="slideDirection === 'forward' ? 'opacity-0 translate-x-12 scale-95' : 'opacity-0 -translate-x-12 scale-95'"
-     x-transition:enter-end="opacity-100 translate-x-0 scale-100"
-     x-transition:leave="transition all duration-500 cubic-bezier(0.4, 0, 0.2, 1)"
-     x-transition:leave-start="opacity-100 scale-100"
-     :x-transition:leave-end="slideDirection === 'forward' ? 'opacity-0 -translate-x-12 scale-95' : 'opacity-0 translate-x-12 scale-95'">
+{{-- الحاوية المتحركة (Track) --}}
+{{-- حذفنا dir=ltr وجعلنا الحسابات متوافقة مع اليمين --}}
+<div class="flex h-full w-full transition-transform duration-500 ease-out"
+     :style="{
+    // نستخدم -100 مضروبة في الفهرس لعكس الاتجاه برمجياً بما يتناسب مع RTL
+    transform: `translateX(calc(${(activeImageIndex * 100)}% + ${offsetX}px))`,
+    transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.2, 1, 0.3, 1)'
+}">
+        <template x-for="(imgData, index) in allImages" :key="index">
+            <div class="w-full h-full flex-shrink-0">
             <img :src="imgData.url"
                  @click="fullscreenImage = true"
                  class="w-full h-full object-cover"
                  alt="{{ $this->product->name }}">
-        </div>
+</div>
     </template>
+</div> {{-- إغلاق الـ Track المتحرك --}}
 
 
 {{-- نقاط التنقل أسفل الصورة --}}
