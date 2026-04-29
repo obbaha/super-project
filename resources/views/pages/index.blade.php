@@ -221,7 +221,6 @@ $resetFilters = function() {
                         <h2 class="text-4xl font-bold mb-8">لنصمم لكِ تجربة فريدة</h2>
                         <div class="grid gap-6">
                             <x-button label="محادثة واتساب" icon="o-chat-bubble-left-right" link="https://wa.me/963930761582" external class="btn-primary h-16 rounded-2xl text-white shadow-xl shadow-primary/20" />
-<x-button label="اتصال هاتفي" icon="o-phone" link="tel:+963930761582" external class="bg-white/20 backdrop-blur-md border-primary/10 h-16 rounded-2xl text-neutral font-bold" />                        </div>
                     </div>
                 </div>
             </section>
