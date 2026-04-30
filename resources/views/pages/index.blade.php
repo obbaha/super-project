@@ -189,6 +189,11 @@ $resetFilters = function() {
                             </div>
                         </a>
                     </div>
+
+
+
+
+
                     <h3 class="text-5xl font-black text-neutral mb-4 tracking-tighter uppercase font-playfair">SYRIA SHOP0</h3>
                     <div class="flex items-center gap-4 mb-12">
                         <div class="h-[1px] w-12 bg-primary/20"></div>
@@ -196,9 +201,22 @@ $resetFilters = function() {
                         <div class="h-[1px] w-12 bg-primary/20"></div>
                     </div>
 
-<button wire:click="$set('showContact', true)" class="text-[11px] text-primary font-bold uppercase tracking-[0.3em] px-8 py-3 border border-primary/20 rounded-full hover:bg-primary hover:text-white transition-all duration-500">
-        تواصل معنا
-    </button>
+
+<div class="mb-12" data-aos="zoom-in" data-aos-delay="100">
+<a href="https://wa.me/963930761582"
+   target="_blank"
+   class="inline-flex items-center gap-3 text-[14px] md:text-[16px] text-primary font-bold uppercase tracking-[0.2em] px-10 py-4 border border-primary/30 rounded-full hover:bg-primary hover:text-white transition-all duration-500 transform hover:scale-105 shadow-sm">
+
+    <!-- أيقونة واتساب -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="flex-shrink-0">
+        <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.14-.1.085.1c1.158.677 2.482 1.035 3.826 1.035h.003c4.367 0 7.926-3.558 7.93-7.93a7.882 7.882 0 0 0-2.388-5.709zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+    </svg>
+
+    <span>تواصل معنا عبر واتساب</span>
+</a>
+</div>
+
+
 
 
                     {{-- باقي حقوق الملكية --}}
@@ -208,23 +226,6 @@ $resetFilters = function() {
                 </div>
             </div>
         </footer>
-
-        {{-- قسم التواصل المشروط (Modal Glassmorphism) --}}
-        @if($showContact)
-            <section class="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-neutral/20 backdrop-blur-xl" data-aos="fade">
-                <div class="bg-main-gradient max-w-2xl w-full p-12 rounded-[3rem] border border-primary/20 shadow-2xl relative overflow-hidden">
-                    <button wire:click="$set('showContact', false)" class="absolute top-8 left-8 text-neutral/40 hover:text-primary transition-colors">
-                        <x-icon name="o-x-mark" class="w-10 h-10" />
-                    </button>
-                    <div class="text-center">
-                        <span class="text-primary text-xs uppercase tracking-widest font-bold mb-6 block">نحن بانتظارك</span>
-                        <h2 class="text-4xl font-bold mb-8">لنصمم لكِ تجربة فريدة</h2>
-                        <div class="grid gap-6">
-                            <x-button label="محادثة واتساب" icon="o-chat-bubble-left-right" link="https://wa.me/963930761582" external class="btn-primary h-16 rounded-2xl text-white shadow-xl shadow-primary/20" />
-                    </div>
-                </div>
-            </section>
-        @endif
     </div>
     @endvolt
 </x-layouts.app>
