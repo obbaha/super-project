@@ -46,10 +46,6 @@
                     <div class="bg-neutral/80 backdrop-blur-md text-white text-[9px] font-black px-3 py-1.5 rounded-full shadow-xl border border-white/20 uppercase tracking-widest">
                         غير متاح حالياً
                     </div>
-                @elseif($isNew)
-                    <div class="bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">
-                        جديد
-                    </div>
                 @endif
             </div>
 
@@ -70,9 +66,22 @@
                 </p>
             </div>
 
+
+
+
+
             <div class="flex items-center justify-between mt-4">
                 <div class="flex flex-col">
-                    <span class="text-[10px] text-primary uppercase tracking-widest font-medium opacity-70">السعر</span>
+
+
+            {{-- السعر القديم بجانبه --}}
+            @if($oldPrice && $oldPrice > $displayPrice)
+                <span class="text-sm md:text-base text-red-400 line-through decoration-red-300 font-light italic">
+                    {{ number_format($oldPrice, 0) }}
+                </span>
+            @endif
+
+
                     <span class="text-lg md:text-2xl font-black text-neutral">
                         {{ number_format($displayPrice, 0) }} <span class="text-xs font-normal">ل.س</span>
                     </span>
