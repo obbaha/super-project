@@ -8,6 +8,8 @@
 
     // استخدام السعر من الموديل مباشرة
     $displayPrice = $product->price;
+    $oldPrice = $product->old_price;
+
 
     // جلب الصورة: نستخدم السمة المحسوبة في الموديل (getFeaturedImageAttribute)
     $displayImage = $product->featured_image;
