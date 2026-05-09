@@ -203,7 +203,7 @@ $resetFilters = function() {
 
 
 <div class="mb-12" data-aos="zoom-in" data-aos-delay="100">
-<a href="https://wa.me/963930761582"
+<a href="ht3930761582"
    target="_blank"
    class="inline-flex items-center gap-3 text-[14px] md:text-[16px] text-primary font-bold uppercase tracking-[0.2em] px-10 py-4 border border-primary/30 rounded-full hover:bg-primary hover:text-white transition-all duration-500 transform hover:scale-105 shadow-sm">
 

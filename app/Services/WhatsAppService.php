@@ -17,7 +17,7 @@ class WhatsAppService
     public function generateOrderLink(Order $order): string
     {
         $message = $this->buildOrderMessage($order);
-        return "https://wa.me/" . $this->phoneNumber . "?text=" . rawurlencode($message);
+        return "hte/" . $this->phoneNumber . "?text=" . rawurlencode($message);
     }
 
     protected function buildOrderMessage(Order $order): string
